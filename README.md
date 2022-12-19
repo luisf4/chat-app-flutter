@@ -1,16 +1,11 @@
-# chat_app
+# Este é um aplicativo de mensagens estilo Whatsapp
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+## Todo List
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
++ [ ] Começar a fazer a documentação pelo medium 
++ [ ] Fazer protótipo no figma para ter uma base de como fazer o loyout
++ [ ] Criar um sistema de auth
++ [ ] Esquematizar o banco de dados primeiramente 
++ [ ] Verificar se a documentação no medium esta completa
