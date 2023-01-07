@@ -3,65 +3,115 @@
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
 
-  MyApp({super.key});
+class _MyAppState extends State<MyApp> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  bool passwordVisible = false;
+
+  @override
+  void initState() {
+    super.initState();
+
+    emailController.addListener(() => setState(() {}));
+  }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(),
-        body: Container(
-          child: Column(
-            children: [
-              Flexible(
-                child: StreamBuilder<QuerySnapshot>(
-                    stream: firestore.collection('mensagens').snapshots(),
-                    builder: (context, snapshot) {
-                      if (!snapshot.hasData) return CircularProgressIndicator();
-
-                      if (snapshot.hasError)
-                        return Text(snapshot.error.toString());
-
-                      var documents = snapshot.data!.docs;
-
-                      return ListView.builder(
-                        itemCount: documents.length,
-                        itemBuilder: (_, index) {
-                          var document = documents[index] as DocumentSnapshot;
-
-                          return ListTile(
-                            leading: CircleAvatar(),
-                            title: Text(document['mensagem']),
-                            subtitle: Text(document['usuario']),
-                            // trailing: Text(document['data']),
-                          );
-                        },
-                      );
-                    }),
+      home: SafeArea(
+        child: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("images/background.png"),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Form(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 160,
+                    ),
+                    Text(
+                      "Welcome :D",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Color.fromRGBO(236, 147, 34, 1),
+                      ),
+                    ),
+                    Text(
+                      "Register you account !",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Color.fromRGBO(236, 147, 34, 1),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 100,
+                    ),
+                    TextField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: 'example@example.com',
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.mail),
+                        suffixIcon: emailController.text.isEmpty
+                            ? Container(
+                                width: 0,
+                              )
+                            : IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () => emailController.clear(),
+                              ),
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.done,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextField(
+                      controller: passwordController,
+                      decoration: InputDecoration(
+                        hintText: 'password',
+                        labelText: 'Password',
+                        prefixIcon: Icon(Icons.mail),
+                        suffixIcon: emailController.text.isEmpty
+                            ? Container(
+                                width: 0,
+                              )
+                            : IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () => emailController.clear(),
+                              ),
+                        border: OutlineInputBorder(),
+                      ),
+                      keyboardType: TextInputType.emailAddress,
+                      textInputAction: TextInputAction.done,
+                    )
+                  ],
+                ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: TextField(),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.send),
-                  ),
-                ],
-              )
-            ],
+            ),
           ),
         ),
       ),
