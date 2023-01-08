@@ -94,19 +94,17 @@ class _MyAppState extends State<MyApp> {
                       decoration: InputDecoration(
                         hintText: 'password',
                         labelText: 'Password',
-                        prefixIcon: Icon(Icons.mail),
-                        suffixIcon: emailController.text.isEmpty
-                            ? Container(
-                                width: 0,
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () => emailController.clear(),
-                              ),
+                        errorText: 'Password is wrong',
+                        suffixIcon: IconButton(
+                          icon: passwordVisible
+                              ? Icon(Icons.visibility_off)
+                              : Icon(Icons.visibility),
+                          onPressed: () => setState(
+                              () => passwordVisible = !passwordVisible),
+                        ),
                         border: OutlineInputBorder(),
                       ),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
+                      obscureText: passwordVisible,
                     )
                   ],
                 ),
