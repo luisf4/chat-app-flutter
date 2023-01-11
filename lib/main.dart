@@ -19,7 +19,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  bool passwordVisible = false;
+  bool passwordInvisible = true;
 
   @override
   void initState() {
@@ -31,6 +31,15 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        primarySwatch: Colors.amber,
+        textTheme: TextTheme(
+          headline1: TextStyle(color: Colors.red),
+          headline2: TextStyle(color: Colors.red),
+          bodyText2: TextStyle(color: Colors.red),
+          subtitle1: TextStyle(color: Colors.red),
+        ),
+      ),
       home: SafeArea(
         child: Container(
           decoration: BoxDecoration(
@@ -54,20 +63,21 @@ class _MyAppState extends State<MyApp> {
                       "Welcome :D",
                       style: TextStyle(
                         fontSize: 30,
-                        color: Color.fromRGBO(236, 147, 34, 1),
+                        color: Colors.amber,
                       ),
                     ),
                     Text(
                       "Register you account !",
                       style: TextStyle(
                         fontSize: 30,
-                        color: Color.fromRGBO(236, 147, 34, 1),
+                        color: Colors.amber,
                       ),
                     ),
                     SizedBox(
                       height: 100,
                     ),
                     TextField(
+                      style: TextStyle(color: Colors.amber),
                       controller: emailController,
                       decoration: InputDecoration(
                         hintText: 'example@example.com',
@@ -81,7 +91,6 @@ class _MyAppState extends State<MyApp> {
                                 icon: Icon(Icons.close),
                                 onPressed: () => emailController.clear(),
                               ),
-                        border: OutlineInputBorder(),
                       ),
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.done,
@@ -90,21 +99,34 @@ class _MyAppState extends State<MyApp> {
                       height: 20,
                     ),
                     TextField(
+                      style: TextStyle(color: Colors.amber),
                       controller: passwordController,
                       decoration: InputDecoration(
                         hintText: 'password',
                         labelText: 'Password',
-                        errorText: 'Password is wrong',
                         suffixIcon: IconButton(
-                          icon: passwordVisible
+                          icon: passwordInvisible
                               ? Icon(Icons.visibility_off)
                               : Icon(Icons.visibility),
                           onPressed: () => setState(
-                              () => passwordVisible = !passwordVisible),
+                              () => passwordInvisible = !passwordInvisible),
                         ),
-                        border: OutlineInputBorder(),
                       ),
-                      obscureText: passwordVisible,
+                      obscureText: passwordInvisible,
+                    ),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('data'),
+                        ),
+                        SizedBox(
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: Text('data'),
+                          ),
+                        ),
+                      ],
                     )
                   ],
                 ),
