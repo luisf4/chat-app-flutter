@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_import, file_names, prefer_const_constructors
-import 'package:chat_app/pages/forgotPage.dart';
 import 'package:chat_app/pages/loginPage.dart';
 import 'package:flutter/material.dart';
 
@@ -133,50 +132,36 @@ class _SingUpState extends State<SingUp> {
                       obscureText: _passwordInvisible,
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 30),
-                      child: Text('Forgot password ?'),
-                    ),ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const ForgotPassword(),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey
+                      padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              child: Text('Sing-up'),
                             ),
-                            child: Text('Forgot password ?'),
                           ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {},
-                            child: Text('Sing-up'),
+                          SizedBox(
+                            width: 30,
                           ),
-                        ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.grey
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LoginPage(),
+                                  ),
+                                );
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.grey
+                              ),
+                              child: Text('Login'),
                             ),
-                            child: Text('Login'),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     )
                   ],
                 ),

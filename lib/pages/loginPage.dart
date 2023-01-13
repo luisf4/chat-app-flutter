@@ -1,7 +1,10 @@
 // ignore_for_file: unnecessary_import, file_names, prefer_const_constructors
 
+import 'package:chat_app/pages/forgotPage.dart';
 import 'package:chat_app/pages/singupPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -102,14 +105,24 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: passwordInvisible,
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 20, 0, 30),
-                      child: Text('Forgot password ?'),
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ForgotPassword(),
+                            ),
+                          );
+                        },
+                        child: Text('Forgot password'),
+                      ),
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {loginModel(_emailController,_passwordController);},
                             child: Text('Login'),
                           ),
                         ),
@@ -142,4 +155,21 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+  
+// Função de login
+Future loginModel(loginEmail, loginPassword) async {
+  showDialog(
+      context: context,
+      builder: (context) => const Center(child: CircularProgressIndicator()));
+  try {
+    await FirebaseAuth.instance.signInWithEmailAndPassword(
+      email: loginEmail.text.trim(),
+      password: loginPassword.text.trim(),
+    );
+    Navigator.of(context).pop();
+  } on FirebaseAuthException catch (e) {
+    print(e);
+  }
+}
+
 }

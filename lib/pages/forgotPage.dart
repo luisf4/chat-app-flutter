@@ -1,5 +1,5 @@
 // ignore_for_file: unnecessary_import, file_names, prefer_const_constructors
-import 'package:chat_app/pages/singupPage.dart';
+import 'package:chat_app/pages/loginPage.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -32,7 +32,19 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(
-                      height: 160,
+                      height: 150,
+                    ),
+                    IconButton(iconSize: 25,alignment: Alignment.topLeft,
+                    
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const LoginPage(),
+                          ),
+                        );
+                      },
                     ),
                     Text(
                       "Recovery your account",
@@ -59,7 +71,6 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       decoration: InputDecoration(
                         hintText: 'exemple@exemple.com',
                         prefixIcon: Icon(Icons.mail),
-
                         labelText: 'Email',
                       ),
                     ),
@@ -80,7 +91,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           width: 30,
                         ),
                       ],
-                    )
+                    ),
                   ],
                 ),
               ),
