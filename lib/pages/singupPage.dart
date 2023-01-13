@@ -1,9 +1,19 @@
-// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors
+// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print
 import 'package:chat_app/pages/loginPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
+import '../models/snackbarModel.dart';
+
 class SingUp extends StatefulWidget {
-  const SingUp({super.key});
+  //
+  final Function() onClikedSignIn;
+  //
+  const SingUp({
+    Key? key,
+    required this.onClikedSignIn,
+  }) : super(key: key);
 
   @override
   State<SingUp> createState() => _SingUpState();
@@ -14,14 +24,14 @@ class _SingUpState extends State<SingUp> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
- bool _passwordInvisible = true;
+  bool _passwordInvisible = true;
   @override
   void initState() {
     super.initState();
-
     _emailController.addListener(() => setState(() {}));
     _nameController.addListener(() => setState(() {}));
   }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -88,7 +98,8 @@ class _SingUpState extends State<SingUp> {
                               ),
                       ),
                       textInputAction: TextInputAction.done,
-                    ),                    SizedBox(
+                    ),
+                    SizedBox(
                       height: 20,
                     ),
                     TextField(
@@ -120,7 +131,6 @@ class _SingUpState extends State<SingUp> {
                         hintText: 'Password',
                         labelText: 'Password',
                         prefixIcon: Icon(Icons.lock),
-
                         suffixIcon: IconButton(
                           icon: _passwordInvisible
                               ? Icon(Icons.visibility_off)
@@ -137,7 +147,10 @@ class _SingUpState extends State<SingUp> {
                         children: [
                           Expanded(
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                singupModel(
+                                    _emailController, _passwordController);
+                              },
                               child: Text('Sing-up'),
                             ),
                           ),
@@ -145,20 +158,22 @@ class _SingUpState extends State<SingUp> {
                             width: 30,
                           ),
                           Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LoginPage(),
-                                  ),
-                                );
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey
-                              ),
-                              child: Text('Login'),
-                            ),
+                            child:                 RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.amber, fontSize: 15),
+                    text: "Don't have a accont ? ",
+                    children: [
+                      TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = widget.onClikedSignIn,
+                        text: "Register",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                    ],
+                  ),
+                ),
                           ),
                         ],
                       ),
@@ -171,5 +186,21 @@ class _SingUpState extends State<SingUp> {
         ),
       ),
     );
+  }
+
+// Função de login
+  Future singupModel(loginEmail, loginPassword) async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(child: CircularProgressIndicator()));
+    try {
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: loginEmail.text.trim(),
+        password: loginPassword.text.trim(),
+      );
+      Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
   }
 }

@@ -3,11 +3,17 @@
 import 'package:chat_app/pages/forgotPage.dart';
 import 'package:chat_app/pages/singupPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  //
+  final VoidCallback onClickedSignUp;
+  //
+  const LoginPage({
+    Key? key,
+    required this.onClickedSignUp,
+  }) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -122,27 +128,32 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () {loginModel(_emailController,_passwordController);},
+                            onPressed: () {
+                              loginModel(_emailController, _passwordController);
+                            },
                             child: Text('Login'),
                           ),
                         ),
                         SizedBox(
                           width: 30,
                         ),
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const SingUp(),
-                                ),
-                              );
-                            },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.grey),
-                            child: Text('Sing-up'),
-                          ),
+                        Expanded(child: // outro botão com frescuras
+                RichText(
+                  text: TextSpan(
+                    style: TextStyle(color: Colors.amber, fontSize: 15),
+                    text: "Don't have a accont ? ",
+                    children: [
+                      TextSpan(
+                        recognizer: TapGestureRecognizer()
+                          ..onTap = widget.onClickedSignUp,
+                        text: "Register",
+                        style: TextStyle(
+                            decoration: TextDecoration.underline,
+                            color: Theme.of(context).colorScheme.secondary),
+                      ),
+                    ],
+                  ),
+                ),
                         ),
                       ],
                     )
@@ -155,21 +166,20 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-  
-// Função de login
-Future loginModel(loginEmail, loginPassword) async {
-  showDialog(
-      context: context,
-      builder: (context) => const Center(child: CircularProgressIndicator()));
-  try {
-    await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: loginEmail.text.trim(),
-      password: loginPassword.text.trim(),
-    );
-    Navigator.of(context).pop();
-  } on FirebaseAuthException catch (e) {
-    print(e);
-  }
-}
 
+// Função de login
+  Future loginModel(loginEmail, loginPassword) async {
+    showDialog(
+        context: context,
+        builder: (context) => const Center(child: CircularProgressIndicator()));
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+        email: loginEmail.text.trim(),
+        password: loginPassword.text.trim(),
+      );
+      // Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
+      print(e);
+    }
+  }
 }

@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, must_be_immutable, curly_braces_in_flow_control_structures, avoid_unnecessary_containers, use_key_in_widget_constructors
 // ignore_for_file: prefer_const_literals_to_create_immutables
 
+import 'package:chat_app/pages/authPage.dart';
 import 'package:chat_app/pages/forgotPage.dart';
 import 'package:chat_app/pages/loginPage.dart';
 import 'package:chat_app/pages/userPage.dart';
@@ -45,7 +46,7 @@ class _MyAppState extends State<MyApp> {
           else if(snapshot.hasData) {
             return UserPage();
           } else {
-            return LoginPage();
+            return AuthPage();
           }
         },
       ),
