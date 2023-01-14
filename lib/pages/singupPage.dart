@@ -209,7 +209,7 @@ class _SingUpState extends State<SingUp> {
       final user = FirebaseAuth.instance.currentUser!;
       final collection = firestore.collection('users');
       await collection.doc(user.email).set({
-      'name': user.displayName,
+      'name': loginName,
       'email': user.email,
       'created_at': DateTime.now()
     });
