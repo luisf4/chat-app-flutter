@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBar(
             title: Text('Contacts'),
             leading: IconButton(
-              icon: Icon(Icons.menu),
+              icon: Icon(Icons.heart_broken),
               onPressed: () {},
             ),
             actions: <Widget>[
