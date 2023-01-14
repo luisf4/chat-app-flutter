@@ -14,16 +14,30 @@ class UserPage extends StatefulWidget {
 class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-          child: Column(
-        children: [
-          Text(FirebaseAuth.instance.currentUser!.email.toString()),
-          ElevatedButton(
-              onPressed: () => FirebaseAuth.instance.signOut(),
-              child: Text('sig out'))
-        ],
-      )),
+    return SafeArea(
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("images/background.png"),
+            fit: BoxFit.cover,
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SingleChildScrollView(
+              child: Container(
+            child: Center(
+                child: Column(
+              children: [
+                Text(FirebaseAuth.instance.currentUser!.email.toString()),
+                ElevatedButton(
+                    onPressed: () => FirebaseAuth.instance.signOut(),
+                    child: Text('sig out'))
+              ],
+            ),),
+          ),),
+        ),
+      ),
     );
   }
 }

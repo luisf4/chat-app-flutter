@@ -3,6 +3,7 @@
 
 import 'package:chat_app/pages/authPage.dart';
 import 'package:chat_app/pages/forgotPage.dart';
+import 'package:chat_app/pages/homePage.dart';
 import 'package:chat_app/pages/loginPage.dart';
 import 'package:chat_app/pages/userPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,7 +45,7 @@ class _MyAppState extends State<MyApp> {
             return Center(child: Text("Something rowng "));
           }
           else if(snapshot.hasData) {
-            return UserPage();
+            return HomePage();
           } else {
             return AuthPage();
           }
