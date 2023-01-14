@@ -1,3 +1,5 @@
+// ignore_for_file: file_names
+
 import 'package:chat_app/pages/loginPage.dart';
 import 'package:chat_app/pages/singupPage.dart';
 import 'package:flutter/material.dart';

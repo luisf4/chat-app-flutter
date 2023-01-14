@@ -1,5 +1,6 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, file_names, avoid_print
 
+import 'package:chat_app/pages/userPage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,51 +35,59 @@ class _HomePageState extends State<HomePage> {
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.person),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => UserPage(),
+                    ),
+                  );
+                },
               ),
             ],
           ),
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Column(
-              children: [StreamBuilder<QuerySnapshot>(
-              stream: firestore.collection('linhas').snapshots(),
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return SizedBox(
-                      child: Center(child: CircularProgressIndicator()));
-                }
+              children: [
+                StreamBuilder<QuerySnapshot>(
+                  stream: firestore.collection('user.uid').snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return SizedBox(
+                          child: Center(child: CircularProgressIndicator()));
+                    }
 
-                if (snapshot.hasError) return Text(snapshot.error.toString());
+                    if (snapshot.hasError) {
+                      return Text(snapshot.error.toString());
+                    }
 
-                var documents = snapshot.data!.docs;
+                    var documents = snapshot.data!.docs;
 
-                return ListView.builder(
-                  itemCount: documents.length,
-                  itemBuilder: (_, index) {
-                    var document = documents[index];
-                    return Padding(
-                      padding: const EdgeInsets.fromLTRB(9, 10, 9, 5),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.white30),
-                          borderRadius: BorderRadius.all(Radius.circular(25)),
-                        ),
-                        child: ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              document['photoUrl'],
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: documents.length,
+                      itemBuilder: (_, index) {
+                        var document = documents[index];
+                        return Padding(
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                          child: InkWell(
+                            onTap: () {
+                              print('cu');
+                            },
+                            child: ListTile(
+                              leading: CircleAvatar(),
+                              title: Text(document['name'],
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20)),
+                              subtitle: Text(document['email']),
                             ),
                           ),
-                          title: Text(document['name']),
-                          subtitle: Text(document['email']),
-                        )
-                      ),
+                        );
+                      },
                     );
                   },
-                );
-              },
-            ),
+                ),
               ],
             ),
           ),
@@ -86,8 +95,5 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+  
 }
-
-
-
-

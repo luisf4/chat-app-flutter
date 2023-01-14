@@ -1,10 +1,9 @@
-// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print
-import 'package:chat_app/pages/loginPage.dart';
+// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-import '../models/snackbarModel.dart';
 
 class SingUp extends StatefulWidget {
   //
@@ -149,7 +148,7 @@ class _SingUpState extends State<SingUp> {
                             child: ElevatedButton(
                               onPressed: () {
                                 singupModel(
-                                    _emailController, _passwordController);
+                                    _emailController, _passwordController,_nameController);
                               },
                               child: Text('Sing-up'),
                             ),
@@ -158,22 +157,25 @@ class _SingUpState extends State<SingUp> {
                             width: 30,
                           ),
                           Expanded(
-                            child:                 RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.amber, fontSize: 15),
-                    text: "Don't have a accont ? ",
-                    children: [
-                      TextSpan(
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = widget.onClikedSignIn,
-                        text: "Register",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Theme.of(context).colorScheme.secondary),
-                      ),
-                    ],
-                  ),
-                ),
+                            child: RichText(
+                              text: TextSpan(
+                                style: TextStyle(
+                                    color: Colors.amber, fontSize: 15),
+                                text: "Don't have a accont ? ",
+                                children: [
+                                  TextSpan(
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = widget.onClikedSignIn,
+                                    text: "Register",
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .secondary),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -189,7 +191,7 @@ class _SingUpState extends State<SingUp> {
   }
 
 // Função de login
-  Future singupModel(loginEmail, loginPassword) async {
+  Future singupModel(loginEmail, loginPassword,loginName) async {
     showDialog(
         context: context,
         builder: (context) => const Center(child: CircularProgressIndicator()));
@@ -200,6 +202,18 @@ class _SingUpState extends State<SingUp> {
       );
       Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
+      print(e);
+    }
+    try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final user = FirebaseAuth.instance.currentUser!;
+      final collection = firestore.collection('users');
+      await collection.doc(user.email).set({
+      'name': user.displayName,
+      'email': user.email,
+      'created_at': DateTime.now()
+    });
+    } on FromFirestore catch (e) {
       print(e);
     }
   }

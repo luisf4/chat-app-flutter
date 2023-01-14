@@ -1,8 +1,7 @@
+// ignore_for_file: file_names, prefer_const_constructors
+
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class UserPage extends StatefulWidget {
   const UserPage({super.key});
@@ -25,17 +24,20 @@ class _UserPageState extends State<UserPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
-              child: Container(
-            child: Center(
+            child: Container(
+              child: Center(
                 child: Column(
-              children: [
-                Text(FirebaseAuth.instance.currentUser!.email.toString()),
-                ElevatedButton(
-                    onPressed: () => FirebaseAuth.instance.signOut(),
-                    child: Text('sig out'))
-              ],
-            ),),
-          ),),
+                  children: [
+                    Text(FirebaseAuth.instance.currentUser!.email.toString()),
+                    ElevatedButton(
+                      onPressed: () => FirebaseAuth.instance.signOut(),
+                      child: Text('sig out'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );

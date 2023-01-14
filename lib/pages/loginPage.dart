@@ -1,7 +1,6 @@
-// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors
+// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, avoid_print
 
 import 'package:chat_app/pages/forgotPage.dart';
-import 'package:chat_app/pages/singupPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
