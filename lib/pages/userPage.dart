@@ -1,5 +1,6 @@
 // ignore_for_file: file_names, prefer_const_constructors
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -28,6 +29,7 @@ class _UserPageState extends State<UserPage> {
               child: Center(
                 child: Column(
                   children: [
+                    Text(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.email).toString()),
                     Text(FirebaseAuth.instance.currentUser!.email.toString()),
                     ElevatedButton(
                       onPressed: () => FirebaseAuth.instance.signOut(),

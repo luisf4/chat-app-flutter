@@ -1,5 +1,4 @@
 // ignore_for_file: unnecessary_import, file_names, prefer_const_constructors
-import 'package:chat_app/pages/loginPage.dart';
 import 'package:flutter/material.dart';
 
 class ForgotPassword extends StatefulWidget {

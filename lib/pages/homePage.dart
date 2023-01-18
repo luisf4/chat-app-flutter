@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_constructors, file_names, avoid_print
 
 import 'package:chat_app/pages/userPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -94,6 +95,21 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  Future register() async{
+        try {
+      FirebaseFirestore firestore = FirebaseFirestore.instance;
+      final user = FirebaseAuth.instance.currentUser!;
+      final collection = firestore.collection('users');
+      await collection.doc(user.email.toString()).set({
+        'name': loginName,
+        'email': user.email,
+        'created_at': DateTime.now()
+      });
+    } on FromFirestore catch (e) {
+      print(e);
+    }
   }
   
 }

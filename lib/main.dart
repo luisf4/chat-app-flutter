@@ -3,8 +3,6 @@
 
 import 'package:chat_app/pages/authPage.dart';
 import 'package:chat_app/pages/homePage.dart';
-import 'package:chat_app/pages/loginPage.dart';
-import 'package:chat_app/pages/userPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

@@ -98,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Password',
+                        prefixIcon: Icon(Icons.lock),
                         labelText: 'Password',
                         suffixIcon: IconButton(
                           icon: passwordInvisible
@@ -133,29 +134,48 @@ class _LoginPageState extends State<LoginPage> {
                             child: Text('Login'),
                           ),
                         ),
-                        SizedBox(
-                          width: 30,
-                        ),
-                        Expanded(child: // outro botão com frescuras
-                RichText(
-                  text: TextSpan(
-                    style: TextStyle(color: Colors.amber, fontSize: 15),
-                    text: "Don't have a accont ? ",
-                    children: [
-                      TextSpan(
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = widget.onClickedSignUp,
-                        text: "Register",
-                        style: TextStyle(
-                            decoration: TextDecoration.underline,
-                            color: Theme.of(context).colorScheme.secondary),
-                      ),
-                    ],
-                  ),
-                ),
-                        ),
                       ],
-                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Center(
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 46, 46, 46),
+                                fontSize: 15),
+                            text: "-- OR --",
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      child: Expanded(
+                        child: // outro botão com frescuras
+                            Center(
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 24, 24, 24),
+                                  fontSize: 15),
+                              text: "Don't have a accont ? ",
+                              children: [
+                                TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = widget.onClickedSignUp,
+                                  text: "Register",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

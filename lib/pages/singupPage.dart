@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-
 class SingUp extends StatefulWidget {
   //
   final Function() onClikedSignIn;
@@ -147,39 +146,52 @@ class _SingUpState extends State<SingUp> {
                           Expanded(
                             child: ElevatedButton(
                               onPressed: () {
-                                singupModel(
-                                    _emailController, _passwordController,_nameController);
+                                singupModel(_emailController,
+                                    _passwordController, _nameController);
                               },
                               child: Text('Sing-up'),
                             ),
                           ),
-                          SizedBox(
-                            width: 30,
-                          ),
-                          Expanded(
-                            child: RichText(
-                              text: TextSpan(
-                                style: TextStyle(
-                                    color: Colors.amber, fontSize: 15),
-                                text: "Don't have a accont ? ",
-                                children: [
-                                  TextSpan(
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = widget.onClikedSignIn,
-                                    text: "Register",
-                                    style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
                         ],
                       ),
-                    )
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Center(
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                                color: Color.fromARGB(255, 46, 46, 46),
+                                fontSize: 15),
+                            text: "-- OR --",
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      child: Center(
+                        child: Expanded(
+                          child: RichText(
+                            text: TextSpan(
+                              style: TextStyle(color: Color.fromARGB(255, 24, 24, 24), fontSize: 15),
+                              text: "Have a account ? ",
+                              children: [
+                                TextSpan(
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = widget.onClikedSignIn,
+                                  text: "Login",
+                                  style: TextStyle(
+                                      decoration: TextDecoration.underline,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .secondary),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -191,7 +203,7 @@ class _SingUpState extends State<SingUp> {
   }
 
 // Função de login
-  Future singupModel(loginEmail, loginPassword,loginName) async {
+  Future singupModel(loginEmail, loginPassword, loginName) async {
     showDialog(
         context: context,
         builder: (context) => const Center(child: CircularProgressIndicator()));
@@ -204,17 +216,6 @@ class _SingUpState extends State<SingUp> {
     } on FirebaseAuthException catch (e) {
       print(e);
     }
-    try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      final user = FirebaseAuth.instance.currentUser!;
-      final collection = firestore.collection('users');
-      await collection.doc(user.email).set({
-      'name': loginName,
-      'email': user.email,
-      'created_at': DateTime.now()
-    });
-    } on FromFirestore catch (e) {
-      print(e);
-    }
+
   }
 }
