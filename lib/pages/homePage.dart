@@ -103,7 +103,7 @@ class _HomePageState extends State<HomePage> {
       final user = FirebaseAuth.instance.currentUser!;
       final collection = firestore.collection('users');
       await collection.doc(user.email.toString()).set({
-        'name': loginName,
+        // 'name': loginName,
         'email': user.email,
         'created_at': DateTime.now()
       });
