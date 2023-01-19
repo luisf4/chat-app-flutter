@@ -32,7 +32,7 @@ class _UserPageState extends State<UserPage> {
                     Text(FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.email).toString()),
                     Text(FirebaseAuth.instance.currentUser!.email.toString()),
                     ElevatedButton(
-                      onPressed: () => FirebaseAuth.instance.signOut(),
+                      onPressed: () => singOut(),
                       child: Text('sig out'),
                     ),
                   ],
@@ -43,5 +43,9 @@ class _UserPageState extends State<UserPage> {
         ),
       ),
     );
+  }
+  Future singOut() async {
+    FirebaseAuth.instance.signOut();
+    Navigator.of(context).pop();
   }
 }

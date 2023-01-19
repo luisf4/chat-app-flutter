@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 StreamBuilder<QuerySnapshot>(
-                  stream: firestore.collection('user.uid').snapshots(),
+                  stream: firestore.collection('users').doc(FirebaseAuth.instance.currentUser!.email!).collection('chat').snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return SizedBox(
@@ -78,10 +78,10 @@ class _HomePageState extends State<HomePage> {
                             },
                             child: ListTile(
                               leading: CircleAvatar(),
-                              title: Text(document['name'],
+                              title: Text(document['user'],
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 20)),
-                              subtitle: Text(document['email']),
+                              subtitle: Text(document['message']),
                             ),
                           ),
                         );
@@ -111,5 +111,5 @@ class _HomePageState extends State<HomePage> {
       print(e);
     }
   }
-  
+  Future registerUser() async {}
 }

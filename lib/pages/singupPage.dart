@@ -1,8 +1,9 @@
-// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print;
+// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print;, avoid_print
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 class SingUp extends StatefulWidget {
   //
@@ -173,7 +174,9 @@ class _SingUpState extends State<SingUp> {
                         child: Expanded(
                           child: RichText(
                             text: TextSpan(
-                              style: TextStyle(color: Color.fromARGB(255, 24, 24, 24), fontSize: 15),
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 24, 24, 24),
+                                  fontSize: 15),
                               text: "Have a account ? ",
                               children: [
                                 TextSpan(
@@ -212,10 +215,22 @@ class _SingUpState extends State<SingUp> {
         email: loginEmail.text.trim(),
         password: loginPassword.text.trim(),
       );
-      Navigator.of(context).pop();
+
+
+      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.email!).collection('chat').doc(Uuid().v1()).set({
+            'user': 'adm',
+            'message': 'teste',
+            'date': DateTime.now()
+      });
+
+      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.email!).set({
+            'user': loginName.text.trim(),
+            'email': loginEmail.text.trim(),
+            'date': DateTime.now()
+      });
+
     } on FirebaseAuthException catch (e) {
       print(e);
     }
-
   }
 }
