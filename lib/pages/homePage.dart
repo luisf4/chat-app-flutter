@@ -99,16 +99,14 @@ class _HomePageState extends State<HomePage> {
           ),
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () {
-              
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => SearchPage(),
-                    ),
-                  );
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SearchPage(),
+                ),
+              );
             },
             label: const Text('Chat'),
             icon: const Icon(Icons.add),
-            backgroundColor: Colors.pink,
           ),
         ),
       ),

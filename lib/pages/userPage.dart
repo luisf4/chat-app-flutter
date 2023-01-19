@@ -25,21 +25,19 @@ class _UserPageState extends State<UserPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
-            child: Container(
-              child: Center(
-                child: Column(
-                  children: [
-                    Text(FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(FirebaseAuth.instance.currentUser!.email)
-                        .toString()),
-                    Text(FirebaseAuth.instance.currentUser!.email.toString()),
-                    ElevatedButton(
-                      onPressed: () => singOut(),
-                      child: Text('sig out'),
-                    ),
-                  ],
-                ),
+            child: Center(
+              child: Column(
+                children: [
+                  Text(FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.email)
+                      .toString()),
+                  Text(FirebaseAuth.instance.currentUser!.email.toString()),
+                  ElevatedButton(
+                    onPressed: () => singOut(),
+                    child: Text('sig out'),
+                  ),
+                ],
               ),
             ),
           ),

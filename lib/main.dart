@@ -30,7 +30,7 @@ class _MyAppState extends State<MyApp> {
           headline1: TextStyle(color: Colors.red),
           headline2: TextStyle(color: Colors.red),
           bodyText2: TextStyle(color: Colors.red),
-          subtitle1: TextStyle(color: Colors.red),
+          subtitle1: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
         ),
       ),
       home: StreamBuilder<User?>(
