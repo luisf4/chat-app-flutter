@@ -78,7 +78,10 @@ class _SearchPageState extends State<SearchPage> {
                                   itemCount: documents.length,
                                   itemBuilder: (context, index) {
                                     return InkWell(
-                                      onTap: () {talkUser(document['user']);},
+                                      onTap: () {
+                                        talkUser(document['email'],
+                                            document['user']);
+                                      },
                                       child: ListTile(
                                         leading: Icon(Icons.email),
                                         title: Text(document['user']),
@@ -104,12 +107,18 @@ class _SearchPageState extends State<SearchPage> {
       ),
     );
   }
-  Future talkUser(user)async{
-          await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.email!)
-          .collection('chat')
-          .doc(Uuid().v1())
-          .set({'user': user, 'message': 'Send me a message!', 'date': DateTime.now()});
+
+  Future talkUser(userEmail, user) async {
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.email!)
+        .collection('chat')
+        .doc(userEmail)
+        .set({
+      'user': user,
+      'email': userEmail,
+      'message': 'Send me a message!',
+      'date': DateTime.now()
+    });
   }
 }

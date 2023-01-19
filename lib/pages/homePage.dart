@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, file_names, avoid_print
 
+import 'package:chat_app/pages/chatPage.dart';
 import 'package:chat_app/pages/searchPage.dart';
 import 'package:chat_app/pages/userPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -79,7 +80,14 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           child: InkWell(
                             onTap: () {
-                              print('a');
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (context) => ChatPage(
+                                    contactName: document['user'],
+                                    messagesUser: document['email'],
+                                  ),
+                                ),
+                              );
                             },
                             child: ListTile(
                               leading: CircleAvatar(),

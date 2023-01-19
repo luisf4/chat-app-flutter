@@ -22,16 +22,12 @@ class _UserPageState extends State<UserPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Scaffold(
+        child: Scaffold(appBar: AppBar(),
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Center(
               child: Column(
                 children: [
-                  Text(FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.email)
-                      .toString()),
                   Text(FirebaseAuth.instance.currentUser!.email.toString()),
                   ElevatedButton(
                     onPressed: () => singOut(),
