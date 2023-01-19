@@ -216,19 +216,21 @@ class _SingUpState extends State<SingUp> {
         password: loginPassword.text.trim(),
       );
 
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.email!)
+          .collection('chat')
+          .doc(Uuid().v1())
+          .set({'user': 'adm', 'message': 'teste', 'date': DateTime.now()});
 
-      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.email!).collection('chat').doc(Uuid().v1()).set({
-            'user': 'adm',
-            'message': 'teste',
-            'date': DateTime.now()
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(FirebaseAuth.instance.currentUser!.email!)
+          .set({
+        'user': loginName.text.trim(),
+        'email': loginEmail.text.trim(),
+        'date': DateTime.now()
       });
-
-      await FirebaseFirestore.instance.collection('users').doc(FirebaseAuth.instance.currentUser!.email!).set({
-            'user': loginName.text.trim(),
-            'email': loginEmail.text.trim(),
-            'date': DateTime.now()
-      });
-
     } on FirebaseAuthException catch (e) {
       print(e);
     }

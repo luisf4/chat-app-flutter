@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, file_names, avoid_print
 
+import 'package:chat_app/pages/searchPage.dart';
 import 'package:chat_app/pages/userPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   //
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -51,7 +52,11 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 StreamBuilder<QuerySnapshot>(
-                  stream: firestore.collection('users').doc(FirebaseAuth.instance.currentUser!.email!).collection('chat').snapshots(),
+                  stream: firestore
+                      .collection('users')
+                      .doc(FirebaseAuth.instance.currentUser!.email!)
+                      .collection('chat')
+                      .snapshots(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData) {
                       return SizedBox(
@@ -74,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                           child: InkWell(
                             onTap: () {
-                              print('cu');
+                              print('a');
                             },
                             child: ListTile(
                               leading: CircleAvatar(),
@@ -92,24 +97,21 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           ),
+          floatingActionButton: FloatingActionButton.extended(
+            onPressed: () {
+              
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => SearchPage(),
+                    ),
+                  );
+            },
+            label: const Text('Chat'),
+            icon: const Icon(Icons.add),
+            backgroundColor: Colors.pink,
+          ),
         ),
       ),
     );
   }
-
-  Future register() async{
-        try {
-      FirebaseFirestore firestore = FirebaseFirestore.instance;
-      final user = FirebaseAuth.instance.currentUser!;
-      final collection = firestore.collection('users');
-      await collection.doc(user.email.toString()).set({
-        // 'name': loginName,
-        'email': user.email,
-        'created_at': DateTime.now()
-      });
-    } on FromFirestore catch (e) {
-      print(e);
-    }
-  }
-  Future registerUser() async {}
 }
