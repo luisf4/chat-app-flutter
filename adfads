@@ -1,2 +1,79 @@
 junhomilton10@gmail.com 
 senha142023
+
+StreamBuilder<QuerySnapshot>(
+                                  stream: FirebaseFirestore.instance
+                                      .collection('users')
+                                      .doc(
+                                          FirebaseAuth.instance.currentUser!.email!)
+                                      .collection('chat')
+                                      .doc(widget.messagesUser)
+                                      .collection('messages')
+                                      .snapshots(),
+                                  builder: (context, snapshot) {
+                                    if (!snapshot.hasData) {
+                                      return SizedBox(
+                                          child: Center(
+                                              child: CircularProgressIndicator()));
+                                    }
+
+                                    if (snapshot.hasError) {
+                                      return Text(snapshot.error.toString());
+                                    }
+
+                                    var documents = snapshot.data!.docs;
+
+                                    return ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      shrinkWrap: true,
+                                      itemCount: documents.length,
+                                      itemBuilder: (_, index) {
+                                        var document = documents[index];
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                          child: Align( alignment: AlignmentDirectional.bottomStart,child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(document['message'],style: TextStyle(color: Colors.black),),
+                                          ))
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+
+
+
+
+
+
+
+
+
+
+                                Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _message,
+                                    decoration: InputDecoration(
+                                      filled: true,
+                                      fillColor: Colors.blueAccent,
+                                      border: OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                        borderRadius: BorderRadius.circular(30),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                InkWell(
+                                  child: Container(padding: EdgeInsets.all(8),decoration: BoxDecoration(shape: BoxShape.circle,color: Colors.amber),child: Icon(Icons.send, size: 45)),
+                                  onTap: () {
+                                    sendMessage(
+                                        widget.messagesUser,
+                                        FirebaseAuth.instance.currentUser!.email!,
+                                        _message.text);
+                                  },
+                                )
+                              ],
+                            ),
