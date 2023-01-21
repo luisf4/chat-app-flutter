@@ -82,9 +82,7 @@ class _HomePageState extends State<HomePage> {
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
-                                  builder: (context) => ChatPage(
-                                    contactName: document['user'],
-                                    messagesUser: document['email'],
+                                  builder: (context) => ChatPage(messageID: document['messageID'],contactName: document['user'],
                                   ),
                                 ),
                               );

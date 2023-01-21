@@ -1,24 +1,25 @@
-// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, must_be_immutable
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
+
 
 class ChatPage extends StatefulWidget {
-  var messagesUser;
 
+  // Variaveis necessarias 
+  var messageID;
   var contactName;
 
-  ChatPage({super.key, required this.messagesUser, this.contactName});
+  ChatPage({super.key, required this.messageID, required this.contactName});
 
   @override
   State<ChatPage> createState() => _SearchPageState();
 }
 
+// Variaveis
 var searchText = '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final _message = TextEditingController();
-
 
 
 class _SearchPageState extends State<ChatPage> {
@@ -45,11 +46,9 @@ class _SearchPageState extends State<ChatPage> {
                   padding: EdgeInsets.all(8.0),
                   child: StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
-                        .collection('users')
-                        .doc(FirebaseAuth.instance.currentUser!.email!)
-                        .collection('chat')
-                        .doc(widget.messagesUser)
                         .collection('messages')
+                        .doc(widget.messageID)
+                        .collection('chat')
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -72,7 +71,7 @@ class _SearchPageState extends State<ChatPage> {
                           return Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                               child: Column(children: [
-                                if (document['user'] ==
+                                if (document['email'] ==
                                     FirebaseAuth.instance.currentUser!.email
                                         .toString()) ...[
                                   Align(
@@ -132,7 +131,8 @@ class _SearchPageState extends State<ChatPage> {
                                     ),
                                     onPressed: () {}),
                                 Expanded(
-                                  child: TextField(controller: _message,
+                                  child: TextField(
+                                    controller: _message,
                                     decoration: InputDecoration(
                                         hintText: "Type Something...",
                                         hintStyle:
@@ -154,12 +154,7 @@ class _SearchPageState extends State<ChatPage> {
                               Icons.send_rounded,
                               color: Colors.white,
                             ),
-                            onTap: () {
-                              sendMessage(
-                                  widget.messagesUser,
-                                  FirebaseAuth.instance.currentUser!.email!,
-                                  _message.text,'a');
-                            },
+                            onTap: () {},
                           ),
                         )
                       ],
@@ -174,41 +169,7 @@ class _SearchPageState extends State<ChatPage> {
     );
   }
 
-  Future sendMessage(userEmail, user, message, userMe) async {
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.email!)
-        .collection('chat')
-        .doc(userEmail)
-        .collection('messages')
-        .doc(Uuid().v1())
-        .set({
-      'user': user.toString(),
-      'message': message.toString(),
-      'date': DateTime.now()
-    });
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userEmail)
-        .collection('chat')
-        .doc(FirebaseAuth.instance.currentUser!.email!)
-        .collection('messages')
-        .doc(Uuid().v1())
-        .set({
-      'user': user.toString(),
-      'message': message.toString(),
-      'date': DateTime.now()
-    });
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(userEmail)
-        .collection('chat')
-        .doc(FirebaseAuth.instance.currentUser!.email!)
-        .set({
-      'user': userMe,
-      'email': userEmail,
-      'message': 'Send me a message!',
-      'date': DateTime.now()
-    });
-  }
+//   Future sendMessage()async {
+
+// }
 }

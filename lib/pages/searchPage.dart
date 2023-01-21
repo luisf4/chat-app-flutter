@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables
+// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, unused_element, no_leading_underscores_for_local_identifiers
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +11,18 @@ class SearchPage extends StatefulWidget {
   State<SearchPage> createState() => _SearchPageState();
 }
 
-var searchText = '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+String _user = '';
+
+@override
+void initState() {
+  initState();
+  // getUser();
+}
+
+final _searchText = TextEditingController();
+final _text = '';
 
 class _SearchPageState extends State<SearchPage> {
   @override
@@ -25,31 +35,49 @@ class _SearchPageState extends State<SearchPage> {
             fit: BoxFit.cover,
           ),
         ),
+
+        // scaffold
         child: Scaffold(
+          //appbar
           appBar: AppBar(),
+          //body
           body: SingleChildScrollView(
             child: Column(
               children: [
+                // SearchBar
                 Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: TextField(
+                    controller: _searchText,
                     decoration: InputDecoration(
                       hintText: "Search user by email",
-                      prefixIcon: Icon(Icons.search),
+                      suffixIcon: InkWell(
+                        child: Icon(Icons.search),
+                        onTap: () {
+                          setState(
+                            () {
+                              _searchText;
+                            },
+                          );
+                        },
+                      ),
                     ),
                     onChanged: (text) {
                       setState(() {
-                        searchText = text;
+                        _searchText;
                       });
                     },
                   ),
                 ),
+                Text(_text),
+                //Streambuilder of the results of the serach
                 Column(
                   children: [
                     StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('users')
-                          .where('email', isEqualTo: searchText)
+                          .where('email',
+                              isEqualTo: _searchText.text.toString())
                           .snapshots(),
                       builder: (context, snapshot) {
                         if (!snapshot.hasData) {
@@ -57,7 +85,6 @@ class _SearchPageState extends State<SearchPage> {
                               child:
                                   Center(child: CircularProgressIndicator()));
                         }
-
                         if (snapshot.hasError) {
                           return Text(snapshot.error.toString());
                         }
@@ -80,7 +107,7 @@ class _SearchPageState extends State<SearchPage> {
                                     return InkWell(
                                       onTap: () {
                                         talkUser(document['email'],
-                                            document['user']);
+                                            document['user'], _user);
                                       },
                                       child: ListTile(
                                         leading: Icon(Icons.email),
@@ -108,15 +135,48 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  Future talkUser(userEmail, user) async {
+// Função que cria uma conversa nova no banco de dados
+  Future talkUser(talkUserEmail, talkUserName, user) async {
+    var randomId = Uuid().v1();
+
+    // Cria a conversa no banco de dados do usuario fazendo a pesquisa
     await FirebaseFirestore.instance
         .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.email!)
+        .doc(FirebaseAuth.instance.currentUser!.email!.toString())
         .collection('chat')
-        .doc(userEmail)
+        .doc(Uuid().v1())
         .set({
+      'messageID': randomId,
+      'user': talkUserName,
+      'email': talkUserEmail,
+      'message': 'Send me a message!',
+      'date': DateTime.now()
+    });
+
+    // Cria a conversa na conta do outro usuario
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(talkUserEmail)
+        .collection('chat')
+        .doc(Uuid().v1())
+        .set({
+      'messageID': randomId,
       'user': user,
-      'email': userEmail,
+      'email': FirebaseAuth.instance.currentUser!.email!.toString(),
+      'message': 'Send me a message!',
+      'date': DateTime.now()
+    });
+
+    // Cria uma conversa com o id na table messages no banco de dados
+    await FirebaseFirestore.instance
+        .collection('messages')
+        .doc(randomId)
+        .collection('chat')
+        .doc(Uuid().v1())
+        .set({
+      // 'messageID': Uuid().v1(),
+      'user': user,
+      'email': FirebaseAuth.instance.currentUser!.email!.toString(),
       'message': 'Send me a message!',
       'date': DateTime.now()
     });
