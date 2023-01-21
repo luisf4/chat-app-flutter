@@ -52,53 +52,56 @@ class _HomePageState extends State<HomePage> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                StreamBuilder<QuerySnapshot>(
-                  stream: firestore
-                      .collection('users')
-                      .doc(FirebaseAuth.instance.currentUser!.email!)
-                      .collection('chat')
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return SizedBox(
-                          child: Center(child: CircularProgressIndicator()));
-                    }
+                SingleChildScrollView(
+          scrollDirection: Axis.vertical,
+                  child: StreamBuilder<QuerySnapshot>(
+                    stream: firestore
+                        .collection('users')
+                        .doc(FirebaseAuth.instance.currentUser!.email!)
+                        .collection('chat')
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return SizedBox(
+                            child: Center(child: CircularProgressIndicator()));
+                      }
 
-                    if (snapshot.hasError) {
-                      return Text(snapshot.error.toString());
-                    }
+                      if (snapshot.hasError) {
+                        return Text(snapshot.error.toString());
+                      }
 
-                    var documents = snapshot.data!.docs;
+                      var documents = snapshot.data!.docs;
 
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      itemCount: documents.length,
-                      itemBuilder: (_, index) {
-                        var document = documents[index];
-                        return Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (context) => ChatPage(messageID: document['messageID'],contactName: document['user'],
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        shrinkWrap: true,
+                        itemCount: documents.length,
+                        itemBuilder: (_, index) {
+                          var document = documents[index];
+                          return Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatPage(messageID: document['messageID'],contactName: document['user'],
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
-                            child: ListTile(
-                              leading: CircleAvatar(),
-                              title: Text(document['user'],
-                                  style: TextStyle(
-                                      color: Colors.black, fontSize: 20)),
-                              subtitle: Text(document['email']),
+                                );
+                              },
+                              child: ListTile(
+                                leading: CircleAvatar(),
+                                title: Text(document['user'],
+                                    style: TextStyle(
+                                        color: Colors.black, fontSize: 20)),
+                                subtitle: Text(document['email']),
+                              ),
                             ),
-                          ),
-                        );
-                      },
-                    );
-                  },
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ),
               ],
             ),

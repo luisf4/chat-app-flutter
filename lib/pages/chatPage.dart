@@ -2,11 +2,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
+import 'package:uuid/uuid.dart';
 
 class ChatPage extends StatefulWidget {
-
-  // Variaveis necessarias 
+  // Variaveis necessarias
   var messageID;
   var contactName;
 
@@ -20,7 +19,6 @@ class ChatPage extends StatefulWidget {
 var searchText = '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final _message = TextEditingController();
-
 
 class _SearchPageState extends State<ChatPage> {
   @override
@@ -154,7 +152,7 @@ class _SearchPageState extends State<ChatPage> {
                               Icons.send_rounded,
                               color: Colors.white,
                             ),
-                            onTap: () {},
+                            onTap: () {sendMessage(widget.messageID, 'user', _message.text.toString());},
                           ),
                         )
                       ],
@@ -169,7 +167,17 @@ class _SearchPageState extends State<ChatPage> {
     );
   }
 
-//   Future sendMessage()async {
-
-// }
+  Future sendMessage(randomId,user, message) async {
+    await FirebaseFirestore.instance
+        .collection('messages')
+        .doc(randomId)
+        .collection('chat')
+        .add({
+      'messageID': randomId,
+      'user': user,
+      'email': FirebaseAuth.instance.currentUser!.email!.toString(),
+      'message': message,
+      'date': DateTime.now()
+    });
+  }
 }

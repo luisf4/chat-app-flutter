@@ -167,14 +167,14 @@ class _SearchPageState extends State<SearchPage> {
       'date': DateTime.now()
     });
 
-    // Cria uma conversa com o id na table messages no banco de dados
+    // Cria uma conversa com o id na table messages no banco de dados com a mensagem inicial "send me a message!"
     await FirebaseFirestore.instance
         .collection('messages')
         .doc(randomId)
         .collection('chat')
         .doc(Uuid().v1())
         .set({
-      // 'messageID': Uuid().v1(),
+      'messageID': randomId,
       'user': user,
       'email': FirebaseAuth.instance.currentUser!.email!.toString(),
       'message': 'Send me a message!',
