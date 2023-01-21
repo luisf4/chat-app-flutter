@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                               title: Text(document['user'],
                                   style: TextStyle(
                                       color: Colors.black, fontSize: 20)),
-                              subtitle: Text(document['message']),
+                              subtitle: Text(document['email']),
                             ),
                           ),
                         );
