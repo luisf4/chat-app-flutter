@@ -209,6 +209,11 @@ class _SingUpState extends State<SingUp> {
 // Função de login
   Future singupModel(loginEmail, loginPassword, loginName) async {
     try {
+      showDialog(
+          context: context,
+          builder: (context) =>
+              const Center(child: CircularProgressIndicator()));
+
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: loginEmail.text.trim(),
         password: loginPassword.text.trim(),

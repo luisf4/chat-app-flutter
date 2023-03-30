@@ -107,11 +107,11 @@ class _SearchPageState extends State<SearchPage> {
                                     return InkWell(
                                       onTap: () {
                                         talkUser(document['email'],
-                                            document['user'], _user);
+                                            document['name'], _user);
                                       },
                                       child: ListTile(
                                         leading: Icon(Icons.email),
-                                        title: Text(document['user']),
+                                        title: Text(document['name']),
                                         subtitle: Text(
                                           document['email'],
                                         ),
