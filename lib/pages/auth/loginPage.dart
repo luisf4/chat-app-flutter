@@ -1,33 +1,33 @@
-// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print;, avoid_print, unused_import
-import 'package:cloud_firestore/cloud_firestore.dart';
+// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, avoid_print
+
+import 'package:chat_app/pages/auth/forgotPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class SingUp extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   //
-  final Function() onClikedSignIn;
+  final VoidCallback onClickedSignUp;
   //
-  const SingUp({
+  const LoginPage({
     Key? key,
-    required this.onClikedSignIn,
+    required this.onClickedSignUp,
   }) : super(key: key);
 
   @override
-  State<SingUp> createState() => _SingUpState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SingUpState extends State<SingUp> {
-  final _nameController = TextEditingController();
+class _LoginPageState extends State<LoginPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool passwordInvisible = true;
 
-  bool _passwordInvisible = true;
   @override
   void initState() {
     super.initState();
+
     _emailController.addListener(() => setState(() {}));
-    _nameController.addListener(() => setState(() {}));
   }
 
   @override
@@ -53,7 +53,7 @@ class _SingUpState extends State<SingUp> {
                       height: 160,
                     ),
                     Text(
-                      "Welcome :D",
+                      "Hello again ",
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
@@ -61,44 +61,15 @@ class _SingUpState extends State<SingUp> {
                       ),
                     ),
                     Text(
-                      "Make a account !",
+                      "Login into your account !",
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
                         color: Colors.amber,
-                      ),
-                    ),
-                    Text(
-                      "Fill all the filds",
-                      style: TextStyle(
-                        fontFamily: 'NunitoBold',
-                        fontSize: 20,
-                        color: Colors.grey,
                       ),
                     ),
                     SizedBox(
                       height: 30,
-                    ),
-                    TextField(
-                      style: TextStyle(color: Colors.amber),
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Your name here',
-                        labelText: 'Name',
-                        prefixIcon: Icon(Icons.person),
-                        suffixIcon: _nameController.text.isEmpty
-                            ? Container(
-                                width: 0,
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () => _nameController.clear(),
-                              ),
-                      ),
-                      textInputAction: TextInputAction.done,
-                    ),
-                    SizedBox(
-                      height: 20,
                     ),
                     TextField(
                       style: TextStyle(color: Colors.amber),
@@ -127,33 +98,43 @@ class _SingUpState extends State<SingUp> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Password',
-                        labelText: 'Password',
                         prefixIcon: Icon(Icons.lock),
+                        labelText: 'Password',
                         suffixIcon: IconButton(
-                          icon: _passwordInvisible
+                          icon: passwordInvisible
                               ? Icon(Icons.visibility_off)
                               : Icon(Icons.visibility),
                           onPressed: () => setState(
-                              () => _passwordInvisible = !_passwordInvisible),
+                              () => passwordInvisible = !passwordInvisible),
                         ),
                       ),
-                      obscureText: _passwordInvisible,
+                      obscureText: passwordInvisible,
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                singupModel(_emailController,
-                                    _passwordController, _nameController);
-                              },
-                              child: Text('Sing-up'),
+                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ForgotPassword(),
                             ),
-                          ),
-                        ],
+                          );
+                        },
+                        child: Text('Forgot password'),
                       ),
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton(
+                            onPressed: () {
+                              loginModel(_emailController, _passwordController);
+                            },
+                            child: Text('Login'),
+                          ),
+                        ),
+                      ],
                     ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -169,19 +150,20 @@ class _SingUpState extends State<SingUp> {
                       ),
                     ),
                     SizedBox(
-                      child: Center(
-                        child: Expanded(
+                      child: Expanded(
+                        child: // outro botão com frescuras
+                            Center(
                           child: RichText(
                             text: TextSpan(
                               style: TextStyle(
                                   color: Color.fromARGB(255, 24, 24, 24),
                                   fontSize: 15),
-                              text: "Have a account ? ",
+                              text: "Don't have a accont ? ",
                               children: [
                                 TextSpan(
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = widget.onClikedSignIn,
-                                  text: "Login",
+                                    ..onTap = widget.onClickedSignUp,
+                                  text: "Register",
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       color: Theme.of(context)
@@ -205,31 +187,16 @@ class _SingUpState extends State<SingUp> {
   }
 
 // Função de login
-  Future singupModel(loginEmail, loginPassword, loginName) async {
+  Future loginModel(loginEmail, loginPassword) async {
     showDialog(
         context: context,
         builder: (context) => const Center(child: CircularProgressIndicator()));
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: loginEmail.text.trim(),
         password: loginPassword.text.trim(),
       );
-
-      // await FirebaseFirestore.instance
-      //     .collection('users')
-      //     .doc(FirebaseAuth.instance.currentUser!.email!)
-      //     .collection('chat')
-      //     .doc(Uuid().v1())
-      //     .set({'user': 'adm', 'message': 'teste', 'date': DateTime.now()});
-
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(FirebaseAuth.instance.currentUser!.email!)
-          .set({
-        'user': loginName.text.trim(),
-        'email': loginEmail.text.trim(),
-        'date': DateTime.now()
-      });
+      // Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       print(e);
     }

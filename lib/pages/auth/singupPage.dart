@@ -1,33 +1,35 @@
-// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, avoid_print
-
-import 'package:chat_app/pages/forgotPage.dart';
+// ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, use_build_context_synchronously, avoid_print;, avoid_print, unused_import, unused_local_variable
+import 'package:chat_app/models/messageModel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
-class LoginPage extends StatefulWidget {
+class SingUp extends StatefulWidget {
   //
-  final VoidCallback onClickedSignUp;
+  final Function() onClikedSignIn;
   //
-  const LoginPage({
+  const SingUp({
     Key? key,
-    required this.onClickedSignUp,
+    required this.onClikedSignIn,
   }) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  State<SingUp> createState() => _SingUpState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _SingUpState extends State<SingUp> {
+  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  bool passwordInvisible = true;
 
+  bool _passwordInvisible = true;
   @override
   void initState() {
     super.initState();
-
     _emailController.addListener(() => setState(() {}));
+    _nameController.addListener(() => setState(() {}));
+    _passwordController.addListener(() => setState(() {}));
   }
 
   @override
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 160,
                     ),
                     Text(
-                      "Hello again ",
+                      "Welcome :D",
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
@@ -61,15 +63,44 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     Text(
-                      "Login into your account !",
+                      "Make a account !",
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
                         color: Colors.amber,
                       ),
                     ),
+                    Text(
+                      "Fill all the filds",
+                      style: TextStyle(
+                        fontFamily: 'NunitoBold',
+                        fontSize: 20,
+                        color: Colors.grey,
+                      ),
+                    ),
                     SizedBox(
                       height: 30,
+                    ),
+                    TextField(
+                      style: TextStyle(color: Colors.amber),
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        hintText: 'Your name here',
+                        labelText: 'Name',
+                        prefixIcon: Icon(Icons.person),
+                        suffixIcon: _nameController.text.isEmpty
+                            ? Container(
+                                width: 0,
+                              )
+                            : IconButton(
+                                icon: Icon(Icons.close),
+                                onPressed: () => _nameController.clear(),
+                              ),
+                      ),
+                      textInputAction: TextInputAction.done,
+                    ),
+                    SizedBox(
+                      height: 20,
                     ),
                     TextField(
                       style: TextStyle(color: Colors.amber),
@@ -98,43 +129,33 @@ class _LoginPageState extends State<LoginPage> {
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Password',
-                        prefixIcon: Icon(Icons.lock),
                         labelText: 'Password',
+                        prefixIcon: Icon(Icons.lock),
                         suffixIcon: IconButton(
-                          icon: passwordInvisible
+                          icon: _passwordInvisible
                               ? Icon(Icons.visibility_off)
                               : Icon(Icons.visibility),
                           onPressed: () => setState(
-                              () => passwordInvisible = !passwordInvisible),
+                              () => _passwordInvisible = !_passwordInvisible),
                         ),
                       ),
-                      obscureText: passwordInvisible,
+                      obscureText: _passwordInvisible,
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
-                      child: InkWell(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ForgotPassword(),
+                      padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                singupModel(_emailController,
+                                    _passwordController, _nameController);
+                              },
+                              child: Text('Sing-up'),
                             ),
-                          );
-                        },
-                        child: Text('Forgot password'),
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              loginModel(_emailController, _passwordController);
-                            },
-                            child: Text('Login'),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.all(20.0),
@@ -150,20 +171,19 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      child: Expanded(
-                        child: // outro botão com frescuras
-                            Center(
+                      child: Center(
+                        child: Expanded(
                           child: RichText(
                             text: TextSpan(
                               style: TextStyle(
                                   color: Color.fromARGB(255, 24, 24, 24),
                                   fontSize: 15),
-                              text: "Don't have a accont ? ",
+                              text: "Have a account ? ",
                               children: [
                                 TextSpan(
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = widget.onClickedSignUp,
-                                  text: "Register",
+                                    ..onTap = widget.onClikedSignIn,
+                                  text: "Login",
                                   style: TextStyle(
                                       decoration: TextDecoration.underline,
                                       color: Theme.of(context)
@@ -187,18 +207,42 @@ class _LoginPageState extends State<LoginPage> {
   }
 
 // Função de login
-  Future loginModel(loginEmail, loginPassword) async {
-    showDialog(
-        context: context,
-        builder: (context) => const Center(child: CircularProgressIndicator()));
+  Future singupModel(loginEmail, loginPassword, loginName) async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: loginEmail.text.trim(),
         password: loginPassword.text.trim(),
       );
-      // Navigator.of(context).pop();
+
+      final user = User(
+          uid: FirebaseAuth.instance.currentUser!.uid.toString(),
+          name: loginName.text.trim(),
+          email: loginEmail.text.trim());
+      await saveUser(user);
     } on FirebaseAuthException catch (e) {
       print(e);
     }
+  }
+}
+
+// Salvar um novo usuário no banco de dados
+Future<void> saveUser(User user) {
+  return usersCollection.doc(user.uid).set(user.toMap());
+}
+
+// Definir a estrutura do documento de usuário
+class User {
+  final String uid;
+  final String name;
+  final String email;
+
+  User({required this.uid, required this.name, required this.email});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'uid': uid,
+      'name': name,
+      'email': email,
+    };
   }
 }
