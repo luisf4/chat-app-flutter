@@ -14,20 +14,15 @@ final CollectionReference messagesCollection =
 // Definir a estrutura do documento de mensagem
 class Message {
   final String senderUid;
-  final String recipientUid;
   final String text;
   final Timestamp timestamp;
 
   Message(
-      {required this.senderUid,
-      required this.recipientUid,
-      required this.text,
-      required this.timestamp});
+      {required this.senderUid, required this.text, required this.timestamp});
 
   Map<String, dynamic> toMap() {
     return {
       'senderUid': senderUid,
-      'recipientUid': recipientUid,
       'text': text,
       'timestamp': timestamp,
     };
@@ -68,11 +63,6 @@ Future<void> saveTalkUser(Conversation newMessage) {
   return messagesCollection.doc(newMessage.id).set(newMessage.toMap());
 }
 
-// Salvar uma nova mensagem no banco de dados
-Future<void> saveMessage(Message message) {
-  return messagesCollection.add(message.toMap());
-}
-
 // Buscar todas as mensagens trocadas entre dois usuários
 Stream<QuerySnapshot> getMessagesBetweenUsers(
     String senderUid, String recipientUid) {
@@ -84,5 +74,9 @@ Stream<QuerySnapshot> getMessagesBetweenUsers(
 
 // busca todoas as menssagens
 Stream<QuerySnapshot> getMessages(id) {
-  return messagesCollection.where('senderUid', isEqualTo: id).snapshots();
+  return messagesCollection
+      .doc(id)
+      .collection('chat')
+      .orderBy('timestamp', descending: false)
+      .snapshots();
 }

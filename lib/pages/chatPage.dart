@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../models/messageModel.dart';
+
 class ChatPage extends StatefulWidget {
   // Variaveis necessarias
   var messageID;
@@ -43,11 +45,7 @@ class _SearchPageState extends State<ChatPage> {
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('messages')
-                        .doc(widget.messageID)
-                        .collection('chat')
-                        .snapshots(),
+                    stream: getMessages(widget.messageID.toString()),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
                         return SizedBox(
@@ -70,15 +68,15 @@ class _SearchPageState extends State<ChatPage> {
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: Column(
                               children: [
-                                if (document['email'] ==
-                                    FirebaseAuth.instance.currentUser!.email
+                                if (document['senderUid'] ==
+                                    FirebaseAuth.instance.currentUser!.uid
                                         .toString()) ...[
                                   Align(
                                     alignment: AlignmentDirectional.topEnd,
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
-                                        document['message'],
+                                        document['text'],
                                         style: TextStyle(color: Colors.black),
                                       ),
                                     ),
@@ -89,7 +87,7 @@ class _SearchPageState extends State<ChatPage> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(10.0),
                                       child: Text(
-                                        document['message'],
+                                        document['text'],
                                         style: TextStyle(color: Colors.black),
                                       ),
                                     ),
@@ -156,7 +154,7 @@ class _SearchPageState extends State<ChatPage> {
                               color: Colors.white,
                             ),
                             onTap: () {
-                              sendMessage();
+                              saveMessage(widget.messageID);
                             },
                           ),
                         )
@@ -172,5 +170,13 @@ class _SearchPageState extends State<ChatPage> {
     );
   }
 
-  Future sendMessage() async {}
+// Salvar uma nova mensagem no banco de dados
+  Future<void> saveMessage(String id) {
+    Message message = Message(
+      senderUid: FirebaseAuth.instance.currentUser!.uid.toString(),
+      timestamp: Timestamp.now(),
+      text: _message.text.toString().trim(),
+    );
+    return messagesCollection.doc(id).collection('chat').add(message.toMap());
+  }
 }
