@@ -1,8 +1,8 @@
-// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, unused_element, no_leading_underscores_for_local_identifiers
+// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, unused_element, no_leading_underscores_for_local_identifiers, unused_local_variable
+import 'package:chat_app/models/messageModel.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -22,7 +22,7 @@ void initState() {
 }
 
 final _searchText = TextEditingController();
-final _text = '';
+const _text = '';
 
 class _SearchPageState extends State<SearchPage> {
   @override
@@ -106,8 +106,12 @@ class _SearchPageState extends State<SearchPage> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        talkUser(document['email'],
-                                            document['name'], _user);
+                                        talkUser(
+                                            document['uid'],
+                                            FirebaseAuth
+                                                .instance.currentUser?.uid
+                                                .toString()
+                                                .trim());
                                       },
                                       child: ListTile(
                                         leading: Icon(Icons.email),
@@ -136,7 +140,18 @@ class _SearchPageState extends State<SearchPage> {
   }
 
 // Função que cria uma conversa nova no banco de dados
-  Future talkUser(talkUserEmail, talkUserName, user) async {
-    var randomId = Uuid().v1();
+  Future talkUser(senderUid, recipientUid) async {
+    Message newMessage = Message(
+      senderUid: recipientUid.toString().trim(),
+      recipientUid: senderUid.toString().trim(),
+      text: 'Hello !',
+      timestamp: Timestamp.now(),
+    );
+
+    saveMessage(newMessage).then((_) {
+      print('Message saved successfully!');
+    }).catchError((error) {
+      print('Failed to save message: $error');
+    });
   }
 }

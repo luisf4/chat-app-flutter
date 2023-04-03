@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, must_be_immutable
+// ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, must_be_immutable, unused_import
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -67,8 +67,9 @@ class _SearchPageState extends State<ChatPage> {
                         itemBuilder: (_, index) {
                           var document = documents[index];
                           return Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                              child: Column(children: [
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                            child: Column(
+                              children: [
                                 if (document['email'] ==
                                     FirebaseAuth.instance.currentUser!.email
                                         .toString()) ...[
@@ -94,7 +95,9 @@ class _SearchPageState extends State<ChatPage> {
                                     ),
                                   ),
                                 ]
-                              ]));
+                              ],
+                            ),
+                          );
                         },
                       );
                     },

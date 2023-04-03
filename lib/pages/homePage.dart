@@ -2,6 +2,7 @@
 
 import 'package:chat_app/pages/chatPage.dart';
 import 'package:chat_app/pages/searchPage.dart';
+import 'package:chat_app/models/messageModel.dart';
 import 'package:chat_app/pages/userPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -53,12 +54,13 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+                  scrollDirection: Axis.vertical,
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: firestore
-                        .collection('users')
-                        .doc(FirebaseAuth.instance.currentUser!.email!)
-                        .collection('chat')
+                    stream: messagesCollection
+                        .where('senderUid',
+                            isEqualTo: FirebaseAuth.instance.currentUser?.uid
+                                .toString()
+                                .trim())
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -84,17 +86,19 @@ class _HomePageState extends State<HomePage> {
                               onTap: () {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
-                                    builder: (context) => ChatPage(messageID: document['messageID'],contactName: document['user'],
+                                    builder: (context) => ChatPage(
+                                      messageID: document['messageID'],
+                                      contactName: document['user'],
                                     ),
                                   ),
                                 );
                               },
                               child: ListTile(
                                 leading: CircleAvatar(),
-                                title: Text(document['user'],
+                                title: Text(document['text'],
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20)),
-                                subtitle: Text(document['email']),
+                                subtitle: Text(document['text']),
                               ),
                             ),
                           );
