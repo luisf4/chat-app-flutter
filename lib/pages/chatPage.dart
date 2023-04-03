@@ -152,7 +152,10 @@ class _SearchPageState extends State<ChatPage> {
                               Icons.send_rounded,
                               color: Colors.white,
                             ),
-                            onTap: () {sendMessage(widget.messageID, 'user', _message.text.toString());},
+                            onTap: () {
+                              sendMessage(widget.messageID, 'user',
+                                  _message.text.toString());
+                            },
                           ),
                         )
                       ],
@@ -167,17 +170,5 @@ class _SearchPageState extends State<ChatPage> {
     );
   }
 
-  Future sendMessage(randomId,user, message) async {
-    await FirebaseFirestore.instance
-        .collection('messages')
-        .doc(randomId)
-        .collection('chat')
-        .add({
-      'messageID': randomId,
-      'user': user,
-      'email': FirebaseAuth.instance.currentUser!.email!.toString(),
-      'message': message,
-      'date': DateTime.now()
-    });
-  }
+  Future sendMessage(randomId, user, message) async {}
 }

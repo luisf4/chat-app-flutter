@@ -138,47 +138,5 @@ class _SearchPageState extends State<SearchPage> {
 // Função que cria uma conversa nova no banco de dados
   Future talkUser(talkUserEmail, talkUserName, user) async {
     var randomId = Uuid().v1();
-
-    // Cria a conversa no banco de dados do usuario fazendo a pesquisa
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.email!.toString())
-        .collection('chat')
-        .doc(Uuid().v1())
-        .set({
-      'messageID': randomId,
-      'user': talkUserName,
-      'email': talkUserEmail,
-      'message': 'Send me a message!',
-      'date': DateTime.now()
-    });
-
-    // Cria a conversa na conta do outro usuario
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(talkUserEmail)
-        .collection('chat')
-        .doc(Uuid().v1())
-        .set({
-      'messageID': randomId,
-      'user': user,
-      'email': FirebaseAuth.instance.currentUser!.email!.toString(),
-      'message': 'Send me a message!',
-      'date': DateTime.now()
-    });
-
-    // Cria uma conversa com o id na table messages no banco de dados com a mensagem inicial "send me a message!"
-    await FirebaseFirestore.instance
-        .collection('messages')
-        .doc(randomId)
-        .collection('chat')
-        .doc(Uuid().v1())
-        .set({
-      'messageID': randomId,
-      'user': user,
-      'email': FirebaseAuth.instance.currentUser!.email!.toString(),
-      'message': 'Send me a message!',
-      'date': DateTime.now()
-    });
   }
 }
