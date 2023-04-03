@@ -1,5 +1,7 @@
 // ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, unused_element, no_leading_underscores_for_local_identifiers, unused_local_variable
 import 'package:chat_app/models/messageModel.dart';
+import 'package:chat_app/pages/auth/singupPage.dart';
+import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +22,8 @@ void initState() {
   initState();
   // getUser();
 }
+
+var uuid = Uuid();
 
 final _searchText = TextEditingController();
 const _text = '';
@@ -141,14 +145,15 @@ class _SearchPageState extends State<SearchPage> {
 
 // Função que cria uma conversa nova no banco de dados
   Future talkUser(senderUid, recipientUid) async {
-    Message newMessage = Message(
+    Conversation newMessage = Conversation(
       senderUid: recipientUid.toString().trim(),
       recipientUid: senderUid.toString().trim(),
-      text: 'Hello !',
+      lastMessage: 'Hello !',
       timestamp: Timestamp.now(),
+      id: uuid.v4(),
     );
 
-    saveMessage(newMessage).then((_) {
+    saveTalkUser(newMessage).then((_) {
       print('Message saved successfully!');
     }).catchError((error) {
       print('Failed to save message: $error');

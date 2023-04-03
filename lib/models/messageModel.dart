@@ -34,6 +34,32 @@ class Message {
   }
 }
 
+// Salva um inicio de conversa
+class Conversation {
+  final String senderUid;
+  final String recipientUid;
+  final String lastMessage;
+  final Timestamp timestamp;
+  final String id;
+
+  Conversation(
+      {required this.senderUid,
+      required this.recipientUid,
+      required this.lastMessage,
+      required this.timestamp,
+      required this.id});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'senderUid': senderUid,
+      'recipientUid': recipientUid,
+      'lastMessage': lastMessage,
+      'timestamp': timestamp,
+      'conversationId': id,
+    };
+  }
+}
+
 // Salvar uma nova mensagem no banco de dados
 Future<void> saveMessage(Message message) {
   return messagesCollection.add(message.toMap());
@@ -46,4 +72,8 @@ Stream<QuerySnapshot> getMessagesBetweenUsers(
       .where('senderUid', isEqualTo: senderUid)
       .where('recipientUid', isEqualTo: recipientUid)
       .snapshots();
+}
+
+Future<void> saveTalkUser(Conversation newMessage) {
+  return messagesCollection.add(newMessage.toMap());
 }
