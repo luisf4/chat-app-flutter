@@ -87,18 +87,17 @@ class _HomePageState extends State<HomePage> {
                                 Navigator.of(context).push(
                                   MaterialPageRoute(
                                     builder: (context) => ChatPage(
-                                      messageID: document['messageID'],
-                                      contactName: document['user'],
-                                    ),
+                                        messageID: document['conversationId'],
+                                        contactName: document['recipientName']),
                                   ),
                                 );
                               },
                               child: ListTile(
                                 leading: CircleAvatar(),
-                                title: Text(document['text'],
+                                title: Text(document['recipientName'],
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20)),
-                                subtitle: Text(document['text']),
+                                subtitle: Text(document['lastMessage']),
                               ),
                             ),
                           );

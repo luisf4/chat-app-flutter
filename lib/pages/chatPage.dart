@@ -156,8 +156,7 @@ class _SearchPageState extends State<ChatPage> {
                               color: Colors.white,
                             ),
                             onTap: () {
-                              sendMessage(widget.messageID, 'user',
-                                  _message.text.toString());
+                              sendMessage();
                             },
                           ),
                         )
@@ -173,5 +172,5 @@ class _SearchPageState extends State<ChatPage> {
     );
   }
 
-  Future sendMessage(randomId, user, message) async {}
+  Future sendMessage() async {}
 }

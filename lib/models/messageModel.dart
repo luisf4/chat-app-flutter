@@ -38,6 +38,7 @@ class Message {
 class Conversation {
   final String senderUid;
   final String recipientUid;
+  final String recipientName;
   final String lastMessage;
   final Timestamp timestamp;
   final String id;
@@ -45,6 +46,7 @@ class Conversation {
   Conversation(
       {required this.senderUid,
       required this.recipientUid,
+      required this.recipientName,
       required this.lastMessage,
       required this.timestamp,
       required this.id});
@@ -53,11 +55,17 @@ class Conversation {
     return {
       'senderUid': senderUid,
       'recipientUid': recipientUid,
+      'recipientName': recipientName,
       'lastMessage': lastMessage,
       'timestamp': timestamp,
       'conversationId': id,
     };
   }
+}
+
+// Cria uma conversa nova
+Future<void> saveTalkUser(Conversation newMessage) {
+  return messagesCollection.doc(newMessage.id).set(newMessage.toMap());
 }
 
 // Salvar uma nova mensagem no banco de dados
@@ -74,6 +82,7 @@ Stream<QuerySnapshot> getMessagesBetweenUsers(
       .snapshots();
 }
 
-Future<void> saveTalkUser(Conversation newMessage) {
-  return messagesCollection.add(newMessage.toMap());
+// busca todoas as menssagens
+Stream<QuerySnapshot> getMessages(id) {
+  return messagesCollection.where('senderUid', isEqualTo: id).snapshots();
 }
