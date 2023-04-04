@@ -70,24 +70,54 @@ class _SearchPageState extends State<ChatPage> {
                                 if (document['senderUid'] ==
                                     FirebaseAuth.instance.currentUser!.uid
                                         .toString()) ...[
-                                  Align(
-                                    alignment: AlignmentDirectional.topEnd,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(
-                                        document['text'],
-                                        style: TextStyle(color: Colors.black),
+                                  Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Align(
+                                      alignment: AlignmentDirectional.topEnd,
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color: Color.fromRGBO(
+                                                224, 224, 224, 1),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              document['text'],
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
                                 ] else ...[
-                                  Align(
-                                    alignment: AlignmentDirectional.topStart,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10.0),
-                                      child: Text(
-                                        document['text'],
-                                        style: TextStyle(color: Colors.black),
+                                  Padding(
+                                    padding: const EdgeInsets.all(6.0),
+                                    child: Align(
+                                      alignment: AlignmentDirectional.topStart,
+                                      child: FittedBox(
+                                        fit: BoxFit.scaleDown,
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            color:
+                                                Color.fromRGBO(45, 168, 230, 1),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(10.0),
+                                            child: Text(
+                                              document['text'],
+                                              style: TextStyle(
+                                                  color: Colors.black),
+                                            ),
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -125,7 +155,7 @@ class _SearchPageState extends State<ChatPage> {
                                 IconButton(
                                     icon: Icon(
                                       Icons.face,
-                                      color: Colors.amber,
+                                      // color: Colors.amber,
                                     ),
                                     onPressed: () {}),
                                 Expanded(
@@ -133,8 +163,6 @@ class _SearchPageState extends State<ChatPage> {
                                     controller: _message,
                                     decoration: InputDecoration(
                                         hintText: "Type Something...",
-                                        hintStyle:
-                                            TextStyle(color: Colors.amber),
                                         border: InputBorder.none),
                                   ),
                                 ),
@@ -146,7 +174,7 @@ class _SearchPageState extends State<ChatPage> {
                         Container(
                           padding: const EdgeInsets.all(15.0),
                           decoration: BoxDecoration(
-                              color: Colors.amber, shape: BoxShape.circle),
+                              color: Colors.blue, shape: BoxShape.circle),
                           child: InkWell(
                             child: Icon(
                               Icons.send_rounded,
@@ -154,6 +182,7 @@ class _SearchPageState extends State<ChatPage> {
                             ),
                             onTap: () {
                               saveMessage(widget.messageID);
+                              _message.clear();
                             },
                           ),
                         )

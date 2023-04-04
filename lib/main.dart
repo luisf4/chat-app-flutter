@@ -25,13 +25,13 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       theme: ThemeData(
         fontFamily: 'Nunito',
-        primarySwatch: Colors.amber,
-        textTheme: TextTheme(
-          displayLarge: TextStyle(color: Colors.red),
-          displayMedium: TextStyle(color: Colors.red),
-          bodyMedium: TextStyle(color: Colors.red),
-          titleMedium: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
-        ),
+        // primarySwatch: Colors.amber,
+        // textTheme: TextTheme(
+        //   displayLarge: TextStyle(color: Colors.red),
+        //   displayMedium: TextStyle(color: Colors.red),
+        //   bodyMedium: TextStyle(color: Colors.red),
+        //   titleMedium: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+        // ),
       ),
       home: StreamBuilder<User?>(
         stream: FirebaseAuth.instance.authStateChanges(),

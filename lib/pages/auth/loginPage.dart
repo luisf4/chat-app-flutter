@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
-                        color: Colors.amber,
+                        color: Colors.blue,
                       ),
                     ),
                     Text(
@@ -65,14 +65,14 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
-                        color: Colors.amber,
+                        // color: Colors.blue,
                       ),
                     ),
                     SizedBox(
                       height: 30,
                     ),
                     TextField(
-                      style: TextStyle(color: Colors.amber),
+                      // style: TextStyle(color: Colors.amber),
                       controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'example@example.com',
@@ -94,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 20,
                     ),
                     TextField(
-                      style: TextStyle(color: Colors.amber),
+                      // style: TextStyle(color: Colors.amber),
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Password',
@@ -144,7 +144,6 @@ class _LoginPageState extends State<LoginPage> {
                             style: TextStyle(
                                 color: Color.fromARGB(255, 46, 46, 46),
                                 fontSize: 15),
-                            text: "-- OR --",
                           ),
                         ),
                       ),

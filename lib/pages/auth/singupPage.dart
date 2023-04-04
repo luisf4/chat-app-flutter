@@ -59,7 +59,7 @@ class _SingUpState extends State<SingUp> {
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
-                        color: Colors.amber,
+                        color: Colors.blue,
                       ),
                     ),
                     Text(
@@ -67,7 +67,7 @@ class _SingUpState extends State<SingUp> {
                       style: TextStyle(
                         fontFamily: 'NunitoBold',
                         fontSize: 30,
-                        color: Colors.amber,
+                        // color: Colors.amber,
                       ),
                     ),
                     Text(
@@ -82,7 +82,7 @@ class _SingUpState extends State<SingUp> {
                       height: 30,
                     ),
                     TextField(
-                      style: TextStyle(color: Colors.amber),
+                      // style: TextStyle(color: Colors.amber),
                       controller: _nameController,
                       decoration: InputDecoration(
                         hintText: 'Your name here',
@@ -103,7 +103,7 @@ class _SingUpState extends State<SingUp> {
                       height: 20,
                     ),
                     TextField(
-                      style: TextStyle(color: Colors.amber),
+                      // style: TextStyle(color: Colors.amber),
                       controller: _emailController,
                       decoration: InputDecoration(
                         hintText: 'example@example.com',
@@ -125,7 +125,7 @@ class _SingUpState extends State<SingUp> {
                       height: 20,
                     ),
                     TextField(
-                      style: TextStyle(color: Colors.amber),
+                      // style: TextStyle(color: Colors.amber),
                       controller: _passwordController,
                       decoration: InputDecoration(
                         hintText: 'Password',
@@ -165,7 +165,6 @@ class _SingUpState extends State<SingUp> {
                             style: TextStyle(
                                 color: Color.fromARGB(255, 46, 46, 46),
                                 fontSize: 15),
-                            text: "-- OR --",
                           ),
                         ),
                       ),
