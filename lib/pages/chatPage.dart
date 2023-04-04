@@ -41,7 +41,6 @@ class _SearchPageState extends State<ChatPage> {
             padding: EdgeInsets.all(5),
             child: Stack(
               children: [
-                //add your other widgets here
                 Padding(
                   padding: EdgeInsets.all(8.0),
                   child: StreamBuilder<QuerySnapshot>(

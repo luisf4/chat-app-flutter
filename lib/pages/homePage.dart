@@ -57,10 +57,11 @@ class _HomePageState extends State<HomePage> {
                   scrollDirection: Axis.vertical,
                   child: StreamBuilder<QuerySnapshot>(
                     stream: messagesCollection
-                        .where('senderUid',
-                            isEqualTo: FirebaseAuth.instance.currentUser?.uid
-                                .toString()
-                                .trim())
+                        .where(
+                          'senderUid',
+                          isEqualTo:
+                              FirebaseAuth.instance.currentUser?.uid.toString(),
+                        )
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
