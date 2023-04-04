@@ -56,12 +56,9 @@ class _HomePageState extends State<HomePage> {
                 SingleChildScrollView(
                   scrollDirection: Axis.vertical,
                   child: StreamBuilder<QuerySnapshot>(
-                    stream: messagesCollection
-                        .where(
-                          'senderUid',
-                          isEqualTo:
-                              FirebaseAuth.instance.currentUser?.uid.toString(),
-                        )
+                    stream: usersCollection
+                        .doc(FirebaseAuth.instance.currentUser?.uid.toString())
+                        .collection('conversation')
                         .snapshots(),
                     builder: (context, snapshot) {
                       if (!snapshot.hasData) {
@@ -89,13 +86,13 @@ class _HomePageState extends State<HomePage> {
                                   MaterialPageRoute(
                                     builder: (context) => ChatPage(
                                         messageID: document['conversationId'],
-                                        contactName: document['recipientName']),
+                                        contactName: document['contactName']),
                                   ),
                                 );
                               },
                               child: ListTile(
                                 leading: CircleAvatar(),
-                                title: Text(document['recipientName'],
+                                title: Text(document['contactName'],
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20)),
                                 subtitle: Text(document['lastMessage']),

@@ -170,7 +170,7 @@ class _SearchPageState extends State<ChatPage> {
   }
 
 // Salvar uma nova mensagem no banco de dados
-  Future<void> saveMessage(String id) {
+  Future<void> saveMessage(id) {
     Message message = Message(
       senderUid: FirebaseAuth.instance.currentUser!.uid.toString(),
       timestamp: Timestamp.now(),

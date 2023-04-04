@@ -23,6 +23,11 @@ void initState() {
 }
 
 var uuid = Uuid();
+// Get a reference to the Firestore collection
+
+// Get the document you want to retrieve the 'name' field value from
+DocumentReference userDocRef =
+    usersCollection.doc(FirebaseAuth.instance.currentUser?.uid.toString());
 
 final _searchText = TextEditingController();
 const _text = '';
@@ -109,13 +114,15 @@ class _SearchPageState extends State<SearchPage> {
                                   itemBuilder: (context, index) {
                                     return InkWell(
                                       onTap: () {
-                                        talkUser(
-                                            document['uid'],
+                                        if (document['uid'] ==
                                             FirebaseAuth
                                                 .instance.currentUser?.uid
-                                                .toString()
-                                                .trim(),
-                                            document['name']);
+                                                .toString()) {
+                                          print('nonono');
+                                        } else {
+                                          talkUser(document['uid'],
+                                              document['name']);
+                                        }
                                       },
                                       child: ListTile(
                                         leading: Icon(Icons.email),
@@ -144,17 +151,29 @@ class _SearchPageState extends State<SearchPage> {
   }
 
 // Função que cria uma conversa nova no banco de dados
-  Future talkUser(senderUid, recipientUid, recipientName) async {
-    Conversation newMessage = Conversation(
-      senderUid: recipientUid.toString().trim(),
-      recipientUid: senderUid.toString().trim(),
-      recipientName: recipientName,
+  Future talkUser(recipientUid, recipientName) async {
+    String senderName = (await userDocRef.get()).get('name');
+    String senderUid = (await userDocRef.get()).get('uid');
+
+    Conversation senderMessage = Conversation(
+      conversationId: uuid.v4(),
+      contactName: recipientName,
       lastMessage: 'Hello !',
       timestamp: Timestamp.now(),
-      id: uuid.v4(),
+    );
+    Conversation userMessage = Conversation(
+      conversationId: senderMessage.conversationId,
+      contactName: senderName,
+      lastMessage: 'Hello !',
+      timestamp: Timestamp.now(),
     );
 
-    saveTalkUser(newMessage).then((_) {
+    saveNewConversation(senderMessage, senderUid).then((_) {
+      print('Message saved successfully!');
+    }).catchError((error) {
+      print('Failed to save message: $error');
+    });
+    saveNewConversation(userMessage, recipientUid).then((_) {
       print('Message saved successfully!');
     }).catchError((error) {
       print('Failed to save message: $error');

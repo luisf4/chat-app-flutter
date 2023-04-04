@@ -31,45 +31,33 @@ class Message {
 
 // Salva um inicio de conversa
 class Conversation {
-  final String senderUid;
-  final String recipientUid;
-  final String recipientName;
+  final String contactName;
   final String lastMessage;
   final Timestamp timestamp;
-  final String id;
+  final String conversationId;
 
   Conversation(
-      {required this.senderUid,
-      required this.recipientUid,
-      required this.recipientName,
+      {required this.contactName,
       required this.lastMessage,
       required this.timestamp,
-      required this.id});
+      required this.conversationId});
 
   Map<String, dynamic> toMap() {
     return {
-      'senderUid': senderUid,
-      'recipientUid': recipientUid,
-      'recipientName': recipientName,
+      'contactName': contactName,
       'lastMessage': lastMessage,
       'timestamp': timestamp,
-      'conversationId': id,
+      'conversationId': conversationId,
     };
   }
 }
 
-// Cria uma conversa nova
-Future<void> saveTalkUser(Conversation newMessage) {
-  return messagesCollection.doc(newMessage.id).set(newMessage.toMap());
-}
-
-// Buscar todas as mensagens trocadas entre dois usuários
-Stream<QuerySnapshot> getMessagesBetweenUsers(
-    String senderUid, String recipientUid) {
-  return messagesCollection
-      .where('senderUid', isEqualTo: senderUid)
-      .where('recipientUid', isEqualTo: recipientUid)
-      .snapshots();
+// Cria uma nova conversa
+Future<void> saveNewConversation(Conversation newMessage, uid) {
+  return usersCollection
+      .doc(uid)
+      .collection('conversation')
+      .add(newMessage.toMap());
 }
 
 // busca todoas as menssagens
