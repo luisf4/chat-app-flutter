@@ -1,5 +1,5 @@
 // ignore_for_file: unnecessary_import, file_names, prefer_const_constructors, avoid_print
-
+import 'package:email_validator/email_validator.dart';
 import 'package:chat_app/pages/auth/forgotPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
@@ -71,45 +71,50 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: 30,
                     ),
-                    TextField(
-                      // style: TextStyle(color: Colors.amber),
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: 'example@example.com',
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.mail),
-                        suffixIcon: _emailController.text.isEmpty
-                            ? Container(
-                                width: 0,
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () => _emailController.clear(),
-                              ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
-                    ),
+                    TextFormField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          hintText: 'example@example.com',
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.mail),
+                          suffixIcon: _emailController.text.isEmpty
+                              ? Container(
+                                  width: 0,
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () => _emailController.clear(),
+                                ),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.done,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (email) =>
+                            email != null && !EmailValidator.validate(email)
+                                ? "Use a valid email!"
+                                : null),
                     SizedBox(
                       height: 20,
                     ),
-                    TextField(
-                      // style: TextStyle(color: Colors.amber),
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        prefixIcon: Icon(Icons.lock),
-                        labelText: 'Password',
-                        suffixIcon: IconButton(
-                          icon: passwordInvisible
-                              ? Icon(Icons.visibility_off)
-                              : Icon(Icons.visibility),
-                          onPressed: () => setState(
-                              () => passwordInvisible = !passwordInvisible),
+                    TextFormField(
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          prefixIcon: Icon(Icons.lock),
+                          labelText: 'Password',
+                          suffixIcon: IconButton(
+                            icon: passwordInvisible
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
+                            onPressed: () => setState(
+                                () => passwordInvisible = !passwordInvisible),
+                          ),
                         ),
-                      ),
-                      obscureText: passwordInvisible,
-                    ),
+                        obscureText: passwordInvisible,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => value != null && value.length < 6
+                            ? "Minimum 6 characters"
+                            : null),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
                       child: InkWell(
@@ -195,7 +200,8 @@ class _LoginPageState extends State<LoginPage> {
         email: loginEmail.text.trim(),
         password: loginPassword.text.trim(),
       );
-      // Navigator.of(context).pop();
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       print(e);
     }

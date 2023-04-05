@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:email_validator/email_validator.dart';
+import '../../models/snackbarModel.dart';
 
 class SingUp extends StatefulWidget {
   //
@@ -209,9 +211,11 @@ class _SingUpState extends State<SingUp> {
   Future singupModel(loginEmail, loginPassword, loginName) async {
     try {
       showDialog(
-          context: context,
-          builder: (context) =>
-              const Center(child: CircularProgressIndicator()));
+        context: context,
+        builder: (context) => const Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
 
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: loginEmail.text.trim(),
@@ -222,9 +226,13 @@ class _SingUpState extends State<SingUp> {
           uid: FirebaseAuth.instance.currentUser!.uid.toString(),
           name: loginName.text.trim(),
           email: loginEmail.text.trim());
+
       await saveUser(user);
+
+      // await Future.delayed(Duration(seconds: 3));
+      Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
-      print(e);
+      Utils.showSnackBar(e.message);
     }
   }
 }

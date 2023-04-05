@@ -42,7 +42,7 @@ class _SearchPageState extends State<ChatPage> {
             child: Stack(
               children: [
                 Padding(
-                  padding: EdgeInsets.all(8.0),
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 80),
                   child: StreamBuilder<QuerySnapshot>(
                     stream: getMessages(widget.messageID.toString()),
                     builder: (context, snapshot) {
