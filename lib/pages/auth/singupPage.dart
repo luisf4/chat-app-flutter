@@ -83,66 +83,76 @@ class _SingUpState extends State<SingUp> {
                     SizedBox(
                       height: 30,
                     ),
-                    TextField(
-                      // style: TextStyle(color: Colors.amber),
-                      controller: _nameController,
-                      decoration: InputDecoration(
-                        hintText: 'Your name here',
-                        labelText: 'Name',
-                        prefixIcon: Icon(Icons.person),
-                        suffixIcon: _nameController.text.isEmpty
-                            ? Container(
-                                width: 0,
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () => _nameController.clear(),
-                              ),
-                      ),
-                      textInputAction: TextInputAction.done,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextField(
-                      // style: TextStyle(color: Colors.amber),
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: 'example@example.com',
-                        labelText: 'Email',
-                        prefixIcon: Icon(Icons.mail),
-                        suffixIcon: _emailController.text.isEmpty
-                            ? Container(
-                                width: 0,
-                              )
-                            : IconButton(
-                                icon: Icon(Icons.close),
-                                onPressed: () => _emailController.clear(),
-                              ),
-                      ),
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.done,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    TextField(
-                      // style: TextStyle(color: Colors.amber),
-                      controller: _passwordController,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        labelText: 'Password',
-                        prefixIcon: Icon(Icons.lock),
-                        suffixIcon: IconButton(
-                          icon: _passwordInvisible
-                              ? Icon(Icons.visibility_off)
-                              : Icon(Icons.visibility),
-                          onPressed: () => setState(
-                              () => _passwordInvisible = !_passwordInvisible),
+                    TextFormField(
+                        // style: TextStyle(color: Colors.amber),
+                        controller: _nameController,
+                        decoration: InputDecoration(
+                          hintText: 'Your name here',
+                          labelText: 'Name',
+                          prefixIcon: Icon(Icons.person),
+                          suffixIcon: _nameController.text.isEmpty
+                              ? Container(
+                                  width: 0,
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () => _nameController.clear(),
+                                ),
                         ),
-                      ),
-                      obscureText: _passwordInvisible,
+                        textInputAction: TextInputAction.done,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => value != null && value.length < 3
+                            ? "Minimum of 3 characters"
+                            : null),
+                    SizedBox(
+                      height: 20,
                     ),
+                    TextFormField(
+                        // style: TextStyle(color: Colors.amber),
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          hintText: 'example@example.com',
+                          labelText: 'Email',
+                          prefixIcon: Icon(Icons.mail),
+                          suffixIcon: _emailController.text.isEmpty
+                              ? Container(
+                                  width: 0,
+                                )
+                              : IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () => _emailController.clear(),
+                                ),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.done,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (email) =>
+                            email != null && !EmailValidator.validate(email)
+                                ? "Use a valid email!"
+                                : null),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                        // style: TextStyle(color: Colors.amber),
+                        controller: _passwordController,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          labelText: 'Password',
+                          prefixIcon: Icon(Icons.lock),
+                          suffixIcon: IconButton(
+                            icon: _passwordInvisible
+                                ? Icon(Icons.visibility_off)
+                                : Icon(Icons.visibility),
+                            onPressed: () => setState(
+                                () => _passwordInvisible = !_passwordInvisible),
+                          ),
+                        ),
+                        obscureText: _passwordInvisible,
+                        autovalidateMode: AutovalidateMode.onUserInteraction,
+                        validator: (value) => value != null && value.length < 6
+                            ? "Minimum of 6 characters"
+                            : null),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 35, 0, 0),
                       child: Row(

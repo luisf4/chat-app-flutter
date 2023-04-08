@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_const_constructors, file_names, avoid_print, prefer_typing_uninitialized_variables, unused_element, no_leading_underscores_for_local_identifiers, unused_local_variable
 import 'package:chat_app/models/messageModel.dart';
+import 'package:chat_app/models/snackbarModel.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -47,7 +48,10 @@ class _SearchPageState extends State<SearchPage> {
         // scaffold
         child: Scaffold(
           //appbar
-          appBar: AppBar(),
+          appBar: AppBar(
+            title: Text('Search'),
+            centerTitle: true,
+          ),
           //body
           body: SingleChildScrollView(
             child: Column(
@@ -118,7 +122,7 @@ class _SearchPageState extends State<SearchPage> {
                                             FirebaseAuth
                                                 .instance.currentUser?.uid
                                                 .toString()) {
-                                          print('nonono');
+                                          Utils.showSnackBar("ITS YOUUUU >:(");
                                         } else {
                                           talkUser(document['uid'],
                                               document['name']);

@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
-
+import 'package:intl/intl.dart';
 import '../models/messageModel.dart';
 
 class ChatPage extends StatefulWidget {
@@ -12,17 +12,16 @@ class ChatPage extends StatefulWidget {
   var contactName;
 
   ChatPage({super.key, required this.messageID, required this.contactName});
-
   @override
   State<ChatPage> createState() => _SearchPageState();
 }
 
 // Variaveis
-var searchText = '';
 FirebaseFirestore firestore = FirebaseFirestore.instance;
 final _message = TextEditingController();
 
 class _SearchPageState extends State<ChatPage> {
+  DateFormat dateFormat = DateFormat('hh:mm:ss');
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -35,7 +34,23 @@ class _SearchPageState extends State<ChatPage> {
         ),
         child: Scaffold(
           appBar: AppBar(
-            title: Text(widget.contactName.toString()),
+            title: Text(
+              widget.contactName.toString(),
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            centerTitle: true,
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            iconTheme: IconThemeData(color: Colors.black),
+            actions: const [
+              CircleAvatar(child: Icon(Icons.change_history_outlined)),
+              SizedBox(
+                width: 15,
+              )
+            ],
           ),
           body: Padding(
             padding: EdgeInsets.all(5),
@@ -63,6 +78,9 @@ class _SearchPageState extends State<ChatPage> {
                         itemCount: documents.length,
                         itemBuilder: (_, index) {
                           var document = documents[index];
+                          DateTime dateTime = document['timestamp'].toDate();
+                          String formattedTime =
+                              DateFormat('hh:mm').format(dateTime);
                           return Padding(
                             padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                             child: Column(
@@ -78,17 +96,37 @@ class _SearchPageState extends State<ChatPage> {
                                         fit: BoxFit.scaleDown,
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color: Color.fromRGBO(
-                                                224, 224, 224, 1),
+                                            color:
+                                                Color.fromRGBO(75, 75, 75, 1),
                                             borderRadius:
-                                                BorderRadius.circular(20),
+                                                BorderRadius.circular(100),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.all(10.0),
-                                            child: Text(
-                                              document['text'],
-                                              style: TextStyle(
-                                                  color: Colors.black),
+                                            padding: const EdgeInsets.fromLTRB(
+                                                13, 10, 13, 10),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  document['text'],
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Color.fromRGBO(
+                                                          255, 255, 255, 1)),
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                  formattedTime,
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Color.fromRGBO(
+                                                          238, 238, 238, 1)),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -104,17 +142,36 @@ class _SearchPageState extends State<ChatPage> {
                                         fit: BoxFit.scaleDown,
                                         child: Container(
                                           decoration: BoxDecoration(
-                                            color:
-                                                Color.fromRGBO(45, 168, 230, 1),
+                                            color: Color.fromRGBO(
+                                                100, 100, 100, 1),
                                             borderRadius:
                                                 BorderRadius.circular(20),
                                           ),
                                           child: Padding(
                                             padding: const EdgeInsets.all(10.0),
-                                            child: Text(
-                                              document['text'],
-                                              style: TextStyle(
-                                                  color: Colors.black),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  document['text'],
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Color.fromRGBO(
+                                                          255, 255, 255, 1)),
+                                                ),
+                                                SizedBox(
+                                                  width: 4,
+                                                ),
+                                                Text(
+                                                  formattedTime,
+                                                  style: TextStyle(
+                                                      fontSize: 11,
+                                                      color: Color.fromRGBO(
+                                                          238, 238, 238, 1)),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ),
@@ -152,18 +209,16 @@ class _SearchPageState extends State<ChatPage> {
                             ),
                             child: Row(
                               children: [
-                                IconButton(
-                                    icon: Icon(
-                                      Icons.face,
-                                      // color: Colors.amber,
-                                    ),
-                                    onPressed: () {}),
                                 Expanded(
-                                  child: TextField(
-                                    controller: _message,
-                                    decoration: InputDecoration(
-                                        hintText: "Type Something...",
-                                        border: InputBorder.none),
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(20, 0, 20, 0),
+                                    child: TextField(
+                                      controller: _message,
+                                      decoration: InputDecoration(
+                                          hintText: "Type Something...",
+                                          border: InputBorder.none),
+                                    ),
                                   ),
                                 ),
                               ],
@@ -171,21 +226,19 @@ class _SearchPageState extends State<ChatPage> {
                           ),
                         ),
                         SizedBox(width: 15),
-                        Container(
-                          padding: const EdgeInsets.all(15.0),
-                          decoration: BoxDecoration(
-                              color: Colors.blue, shape: BoxShape.circle),
-                          child: InkWell(
-                            child: Icon(
-                              Icons.send_rounded,
-                              color: Colors.white,
+                        IconButton(
+                            icon: Icon(
+                              Icons.send,
+                              // color: Colors.amber,
                             ),
-                            onTap: () {
-                              saveMessage(widget.messageID);
-                              _message.clear();
-                            },
-                          ),
-                        )
+                            onPressed: () {
+                              if (_message.text != "") {
+                                saveMessage(widget.messageID);
+                                _message.clear();
+                              } else {
+                                return;
+                              }
+                            }),
                       ],
                     ),
                   ),

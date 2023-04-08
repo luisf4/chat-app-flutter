@@ -113,7 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                         obscureText: passwordInvisible,
                         autovalidateMode: AutovalidateMode.onUserInteraction,
                         validator: (value) => value != null && value.length < 6
-                            ? "Minimum 6 characters"
+                            ? "Minimum of 6 characters"
                             : null),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),

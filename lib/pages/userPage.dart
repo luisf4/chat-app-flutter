@@ -21,16 +21,24 @@ class _UserPageState extends State<UserPage> {
             fit: BoxFit.cover,
           ),
         ),
-        child: Scaffold(appBar: AppBar(),
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text('User Page'),
+            centerTitle: true,
+          ),
           backgroundColor: Colors.transparent,
           body: SingleChildScrollView(
             child: Center(
               child: Column(
                 children: [
+                  Icon(
+                    Icons.account_box,
+                    size: 200.0,
+                  ),
                   Text(FirebaseAuth.instance.currentUser!.email.toString()),
                   ElevatedButton(
                     onPressed: () => singOut(),
-                    child: Text('sig out'),
+                    child: Text('Logout'),
                   ),
                 ],
               ),

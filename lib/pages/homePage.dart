@@ -32,8 +32,9 @@ class _HomePageState extends State<HomePage> {
         child: Scaffold(
           appBar: AppBar(
             title: Text('Contacts'),
+            centerTitle: true,
             leading: IconButton(
-              icon: Icon(Icons.heart_broken),
+              icon: Icon(Icons.ac_unit_rounded),
               onPressed: () {},
             ),
             actions: <Widget>[
@@ -91,7 +92,8 @@ class _HomePageState extends State<HomePage> {
                                 );
                               },
                               child: ListTile(
-                                leading: CircleAvatar(),
+                                leading: CircleAvatar(
+                                    child: Icon(Icons.change_history_outlined)),
                                 title: Text(document['contactName'],
                                     style: TextStyle(
                                         color: Colors.black, fontSize: 20)),
